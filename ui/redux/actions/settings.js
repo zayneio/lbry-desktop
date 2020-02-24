@@ -71,6 +71,7 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
       value: !value && value !== false ? null : value,
     };
     Lbry.settings_set(newSettings).then(newSetting => {
+      console.log('NEW SETTING DO SET DAEMON SETTING', newSetting)
       if (Object.values(SHARED_PREFERENCES).includes(key) && !doNotDispatch) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,

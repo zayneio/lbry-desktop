@@ -490,6 +490,7 @@ export function doGetAndPopulatePreferences() {
         // @if TARGET='app'
         const { settings, sharing_3P: sharing3P } = savedPreferences.value;
         // apply daemonSettings (todo: separate function)
+        console.log('DOGETPOP SETTINGS', settings)
         Object.entries(settings).forEach(([key, val]) => {
           if (val !== null && daemonSettings[key] !== val) {
             if (key === SHARED_PREFERENCES.WALLET_SERVERS) {

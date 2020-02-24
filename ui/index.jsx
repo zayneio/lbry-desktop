@@ -217,7 +217,7 @@ ipcRenderer.on('window-is-focused', () => {
 });
 
 ipcRenderer.on('devtools-is-opened', () => {
-  doLogWarningConsoleMessage();
+  // doLogWarningConsoleMessage();
 });
 
 // Force exit mode for html5 fullscreen api
