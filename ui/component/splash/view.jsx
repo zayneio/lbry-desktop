@@ -12,9 +12,9 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import 'css-doodle';
 
-const FORTY_FIVE_SECONDS = 45 * 1000;
+const FORTY_FIVE_SECONDS = 90 * 1000;
 const UPDATE_INTERVAL = 500; // .5 seconds
-const MAX_WALLET_WAIT = 20; // 10 seconds for wallet to be started, but servers to be unavailable
+const MAX_WALLET_WAIT = 60; // 10 seconds for wallet to be started, but servers to be unavailable
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
