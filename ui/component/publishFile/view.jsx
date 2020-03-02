@@ -5,6 +5,7 @@ import { regexInvalidURI } from 'lbry-redux';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 
 type Props = {
@@ -18,6 +19,8 @@ type Props = {
   showToast: string => void,
   inProgress: boolean,
   clearPublish: () => void,
+  daemonStatus: any,
+  optimize: boolean,
 };
 
 function PublishFile(props: Props) {
@@ -31,7 +34,12 @@ function PublishFile(props: Props) {
     publishing,
     inProgress,
     clearPublish,
+    optimize,
+    daemonStatus,
   } = props;
+
+  const { ffmpeg_status: ffmpegStatus } = daemonStatus;
+  const { available } = ffmpegStatus;
 
   const [duration, setDuration] = useState(0);
   const [size, setSize] = useState(0);
@@ -189,7 +197,7 @@ function PublishFile(props: Props) {
     }
     // @endif
 
-    const publishFormParams: { filePath: string | WebFile, name?: string } = {
+    const publishFormParams: { filePath: string | WebFile, name?: string, optimize?: boolean } = {
       filePath: file.path || file,
     };
     // Strip off extention and replace invalid characters
@@ -232,6 +240,14 @@ function PublishFile(props: Props) {
         <React.Fragment>
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {getMessage()}
+          <FormField
+            type="checkbox"
+            checked={available && optimize}
+            disabled={!available}
+            onChange={e => updatePublishForm({ optimize: e.target.checked })}
+            label={__('Optimize and transcode video')}
+            name="optimize"
+          />
         </React.Fragment>
       }
     />
