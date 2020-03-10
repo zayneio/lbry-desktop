@@ -14,6 +14,11 @@ export const selectDaemonStatus = createSelector(
   state => state.daemonStatus
 );
 
+export const selectFfmpegStatus = createSelector(
+  selectDaemonStatus,
+  status => status.ffmpeg_status
+);
+
 export const selectClientSettings = createSelector(
   selectState,
   state => state.clientSettings || {}

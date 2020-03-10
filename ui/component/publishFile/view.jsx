@@ -242,8 +242,8 @@ function PublishFile(props: Props) {
           {getMessage()}
           <FormField
             type="checkbox"
-            checked={available && optimize}
-            disabled={!available}
+            checked={isVid && available && optimize}
+            disabled={!isVid || !available}
             onChange={e => updatePublishForm({ optimize: e.target.checked })}
             label={__('Optimize and transcode video')}
             name="optimize"
