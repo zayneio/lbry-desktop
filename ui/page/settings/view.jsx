@@ -14,7 +14,7 @@ import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
-import { SETTINGS } from 'lbry-redux';
+import { SETTINGS, Lbry } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getKeychainPassword } from 'util/saved-passwords';
 
@@ -51,6 +51,7 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
+  clearDaemonSetting: string => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
   toggle3PAnalytics: boolean => void,
   clearCache: () => Promise<any>,
@@ -79,6 +80,7 @@ type Props = {
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
+  ffmpegStatus: { available: boolean, which: string },
 };
 
 type State = {
@@ -106,7 +108,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, ffmpegStatus, daemonSettings } = this.props;
+    const { available } = ffmpegStatus;
+    const { ffmpeg_folder: ffmpegFolder } = daemonSettings;
     if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
       getKeychainPassword().then(p => {
@@ -115,6 +119,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
         }
       });
     }
+    if (!available) {
+      if (ffmpegFolder) {
+        this.clearDaemonSetting('ffmpeg_folder');
+      }
+      Lbry.ffmpeg_find();
+    }
+  }
+
+  onFffmpegFolder(path: string) {
+    this.setDaemonSetting('ffmpeg_folder', path);
+    Lbry.ffmpeg_find();
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -188,9 +203,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setDaemonSetting(name, value);
   }
 
+  clearDaemonSetting(name: string): void {
+    this.props.clearDaemonSetting(name);
+  }
+
   render() {
     const {
       daemonSettings,
+      ffmpegStatus,
       allowAnalytics,
       showNsfw,
       instantPurchaseEnabled,
@@ -219,6 +239,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
+    const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
     const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
 
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
@@ -260,22 +281,30 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
+            {/* @if TARGET='app' */}
             <Card
               title={__('Transcoding')}
               actions={
                 <React.Fragment>
-                  <FileSelector
-                    type="openDirectory"
-                    currentPath={daemonSettings.ffmpeg_folder}
-                    onFileChosen={(newDirectory: WebFile) => {
-                      setDaemonSetting('ffmpeg_folder', newDirectory.path);
-                    }}
-                  />
-                  <p className="help">{__('Locate FFMPEG so we can transcode.')}</p>
+                  <>
+                    <FileSelector
+                      type="openDirectory"
+                      currentPath={ffmpegPath || daemonSettings.ffmpeg_folder}
+                      onFileChosen={(newDirectory: WebFile) => {
+                        this.onFffmpegFolder(newDirectory.path);
+                      }}
+                      disabled={Boolean(ffmpegPath)}
+                    />
+                    <p className="help">
+                      {ffmpegAvailable
+                        ? __('Ffmpeg  is correctly configured')
+                        : __('Ffmpeg could not be found. Navigate to it, or Install it and reload the app.')}
+                    </p>
+                  </>
                 </React.Fragment>
               }
             />
-
+            {/* @endif */}
             <Card
               title={__('Network and Data Settings')}
               actions={
