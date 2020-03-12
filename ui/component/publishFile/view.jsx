@@ -35,7 +35,7 @@ function PublishFile(props: Props) {
     inProgress,
     clearPublish,
     optimize,
-    ffmpegStatus,
+    ffmpegStatus = {},
   } = props;
 
   const { available } = ffmpegStatus;
@@ -239,6 +239,7 @@ function PublishFile(props: Props) {
         <React.Fragment>
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {getMessage()}
+          {/* @if TARGET='app' */}
           <FormField
             type="checkbox"
             checked={isVid && available && optimize}
@@ -247,6 +248,7 @@ function PublishFile(props: Props) {
             label={available ? __('Optimize and transcode video') : __('FFmpeg not configured')}
             name="optimize"
           />
+          {/* @endif */}
         </React.Fragment>
       }
     />
