@@ -19,7 +19,7 @@ type Props = {
   showToast: string => void,
   inProgress: boolean,
   clearPublish: () => void,
-  daemonStatus: any,
+  ffmpegStatus: any,
   optimize: boolean,
 };
 
@@ -35,10 +35,9 @@ function PublishFile(props: Props) {
     inProgress,
     clearPublish,
     optimize,
-    daemonStatus,
+    ffmpegStatus,
   } = props;
 
-  const { ffmpeg_status: ffmpegStatus } = daemonStatus;
   const { available } = ffmpegStatus;
 
   const [duration, setDuration] = useState(0);
@@ -245,7 +244,7 @@ function PublishFile(props: Props) {
             checked={isVid && available && optimize}
             disabled={!isVid || !available}
             onChange={e => updatePublishForm({ optimize: e.target.checked })}
-            label={__('Optimize and transcode video')}
+            label={available ? __('Optimize and transcode video') : __('FFmpeg not configured')}
             name="optimize"
           />
         </React.Fragment>

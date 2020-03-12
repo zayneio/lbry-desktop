@@ -7,7 +7,7 @@ import {
   doToast,
   doClearPublish,
 } from 'lbry-redux';
-import { selectDaemonStatus } from 'redux/selectors/settings';
+import { selectFfmpegStatus } from 'redux/selectors/settings';
 import PublishPage from './view';
 
 const select = state => ({
@@ -17,7 +17,7 @@ const select = state => ({
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),
   publishing: makeSelectPublishFormValue('publishing')(state),
-  daemonStatus: selectDaemonStatus(state),
+  ffmpegStatus: selectFfmpegStatus(state),
 });
 
 const perform = dispatch => ({
