@@ -297,8 +297,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     />
                     <p className="help">
                       {ffmpegAvailable
-                        ? __('Ffmpeg  is correctly configured')
-                        : __('Ffmpeg could not be found. Navigate to it, or Install it and reload the app.')}
+                        ? __('FFmpeg  is correctly configured')
+                        : __('FFmpeg could not be found. Navigate to it or Install, then quit and restart the app.')}
                     </p>
                   </>
                 </React.Fragment>
