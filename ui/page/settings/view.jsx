@@ -129,7 +129,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     }
   }
 
-  onFffmpegFolder(path: string) {
+  onFFmpegFolder(path: string) {
     this.setDaemonSetting('ffmpeg_folder', path);
     Lbry.ffmpeg_find();
   }
@@ -289,21 +289,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
               title={__('Transcoding')}
               actions={
                 <React.Fragment>
-                  <>
-                    <FileSelector
-                      type="openDirectory"
-                      currentPath={ffmpegPath || daemonSettings.ffmpeg_folder}
-                      onFileChosen={(newDirectory: WebFile) => {
-                        this.onFffmpegFolder(newDirectory.path);
-                      }}
-                      disabled={Boolean(ffmpegPath)}
-                    />
-                    <p className="help">
-                      {ffmpegAvailable
-                        ? __('FFmpeg  is correctly configured')
-                        : __('FFmpeg could not be found. Navigate to it or Install, then quit and restart the app.')}
-                    </p>
-                  </>
+                  <FileSelector
+                    type="openDirectory"
+                    currentPath={ffmpegPath || daemonSettings.ffmpeg_folder}
+                    onFileChosen={(newDirectory: WebFile) => {
+                      this.onFFmpegFolder(newDirectory.path);
+                    }}
+                    disabled={Boolean(ffmpegPath)}
+                  />
+                  <p className="help">
+                    {ffmpegAvailable
+                      ? __('FFmpeg  is correctly configured')
+                      : __('FFmpeg could not be found. Navigate to it or Install, then quit and restart the app.')}
+                  </p>
                 </React.Fragment>
               }
             />
