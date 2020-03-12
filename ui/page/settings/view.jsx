@@ -109,8 +109,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { isAuthenticated, ffmpegStatus, daemonSettings } = this.props;
+    // @if TARGET='app'
     const { available } = ffmpegStatus;
     const { ffmpeg_folder: ffmpegFolder } = daemonSettings;
+    if (!available) {
+      if (ffmpegFolder) {
+        this.clearDaemonSetting('ffmpeg_folder');
+      }
+      Lbry.ffmpeg_find();
+    }
+    // @endif
     if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
       getKeychainPassword().then(p => {
@@ -118,12 +126,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
           this.setState({ storedPassword: true });
         }
       });
-    }
-    if (!available) {
-      if (ffmpegFolder) {
-        this.clearDaemonSetting('ffmpeg_folder');
-      }
-      Lbry.ffmpeg_find();
     }
   }
 
@@ -238,8 +240,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const { storedPassword } = this.state;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-
+    // @if TARGET='app'
     const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;
+    // @endif
     const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
 
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);

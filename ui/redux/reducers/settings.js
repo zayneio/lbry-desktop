@@ -18,7 +18,7 @@ const defaultState = {
   customWalletServers: [],
   sharedPreferences: {},
   daemonSettings: {},
-  daemonStatus: {},
+  daemonStatus: { ffmpeg_status: {} },
   clientSettings: {
     // UX
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: false,
