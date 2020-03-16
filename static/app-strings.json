@@ -1028,9 +1028,8 @@
   "Your video has a bitrate over 6 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 6 mbps. We suggest transcoding to provide viewers the best experience.",
   "Transcoding": "Transcoding",
   "Optimize and transcode video": "Optimize and transcode video",
-  "Known Tags": "Known Tags",
   "FFmpeg not found": "FFmpeg not found",
-  "FFmpeg  is correctly configured": "FFmpeg  is correctly configured"
+  "FFmpeg  is correctly configured": "FFmpeg  is correctly configured",
   "ffmpeg not found": "ffmpeg not found",
   "Known Tags": "Known Tags",
   "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.",
@@ -1051,5 +1050,14 @@
   "Total Publishes": "Total Publishes",
   "Are you sure you want to delete this channel?": "Are you sure you want to delete this channel?",
   "Are you sure? Type %name% to confirm that you wish to delete the channel.": "Are you sure? Type %name% to confirm that you wish to delete the channel.",
-  "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.": "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail."
+  "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.": "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.",
+  "view other claims at lbry://%name%": "view other claims at lbry://%name%",
+  "Default": "Default",
+  "FFmpeg not configured": "FFmpeg not configured",
+  "Finnish": "Finnish",
+  "Kannada": "Kannada",
+  "Experimental Transcoding": "Experimental Transcoding",
+  "Check again": "Check again",
+  "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app.": "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app.",
+  "A Folder containing FFmpeg": "A Folder containing FFmpeg"
 }
