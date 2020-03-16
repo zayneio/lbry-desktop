@@ -19,6 +19,11 @@ export const selectFfmpegStatus = createSelector(
   status => status.ffmpeg_status
 );
 
+export const selectFindingFFmpeg = createSelector(
+  selectState,
+  state => state.findingFFmpeg || false
+);
+
 export const selectClientSettings = createSelector(
   selectState,
   state => state.clientSettings || {}

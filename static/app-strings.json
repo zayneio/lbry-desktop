@@ -1028,9 +1028,8 @@
   "Your video has a bitrate over 6 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 6 mbps. We suggest transcoding to provide viewers the best experience.",
   "Transcoding": "Transcoding",
   "Optimize and transcode video": "Optimize and transcode video",
-  "Known Tags": "Known Tags",
   "FFmpeg not found": "FFmpeg not found",
-  "FFmpeg  is correctly configured": "FFmpeg  is correctly configured"
+  "FFmpeg  is correctly configured": "FFmpeg  is correctly configured",
   "ffmpeg not found": "ffmpeg not found",
   "Known Tags": "Known Tags",
   "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.",
@@ -1070,4 +1069,13 @@
   "rename your existing wallet": "rename your existing wallet",
   "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory": "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory",
   "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory.": "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory."
+  "Default": "Default",
+  "FFmpeg not configured": "FFmpeg not configured",
+  "Finnish": "Finnish",
+  "Kannada": "Kannada",
+  "Experimental Transcoding": "Experimental Transcoding",
+  "Check again": "Check again",
+  "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app.": "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app.",
+  "A Folder containing FFmpeg": "A Folder containing FFmpeg"
+  "view other claims at lbry://%name%": "view other claims at lbry://%name%",
 }

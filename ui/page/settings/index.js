@@ -7,13 +7,20 @@ import {
   doToggle3PAnalytics,
 } from 'redux/actions/app';
 import { selectAllowAnalytics } from 'redux/selectors/app';
-import { doSetDaemonSetting, doClearDaemonSetting, doSetClientSetting, doSetDarkTime } from 'redux/actions/settings';
+import {
+  doSetDaemonSetting,
+  doClearDaemonSetting,
+  doSetClientSetting,
+  doSetDarkTime,
+  doFindFFmpeg,
+} from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import {
   makeSelectClientSetting,
   selectDaemonSettings,
   selectFfmpegStatus,
   selectosNotificationsEnabled,
+  selectFindingFFmpeg,
 } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
@@ -40,6 +47,7 @@ const select = state => ({
   showReposts: makeSelectClientSetting(SETTINGS.SHOW_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
   ffmpegStatus: selectFfmpegStatus(state),
+  findingFFmpeg: selectFindingFFmpeg(state),
 });
 
 const perform = dispatch => ({
@@ -54,6 +62,7 @@ const perform = dispatch => ({
   confirmForgetPassword: modalProps => dispatch(doNotifyForgetPassword(modalProps)),
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
+  findFFmpeg: () => dispatch(doFindFFmpeg()),
 });
 
 export default connect(

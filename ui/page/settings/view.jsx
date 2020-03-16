@@ -14,9 +14,10 @@ import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
-import { SETTINGS, Lbry } from 'lbry-redux';
+import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
+import Spinner from 'component/spinner';
 
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -81,6 +82,8 @@ type Props = {
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
   ffmpegStatus: { available: boolean, which: string },
+  findingFFmpeg: boolean,
+  findFFmpeg: () => void,
 };
 
 type State = {
@@ -108,7 +111,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { isAuthenticated, ffmpegStatus, daemonSettings } = this.props;
+    const { isAuthenticated, ffmpegStatus, daemonSettings, findFFmpeg } = this.props;
     // @if TARGET='app'
     const { available } = ffmpegStatus;
     const { ffmpeg_folder: ffmpegFolder } = daemonSettings;
@@ -116,7 +119,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       if (ffmpegFolder) {
         this.clearDaemonSetting('ffmpeg_folder');
       }
-      Lbry.ffmpeg_find();
+      findFFmpeg();
     }
     // @endif
     if (isAuthenticated || !IS_WEB) {
@@ -131,7 +134,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   onFFmpegFolder(path: string) {
     this.setDaemonSetting('ffmpeg_folder', path);
-    Lbry.ffmpeg_find();
+    this.findFFmpeg();
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -209,6 +212,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.clearDaemonSetting(name);
   }
 
+  findFFmpeg(): void {
+    this.props.findFFmpeg();
+  }
+
   render() {
     const {
       daemonSettings,
@@ -236,8 +243,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
       clearPlayingUri,
       darkModeTimes,
       clearCache,
+      findingFFmpeg,
     } = this.props;
     const { storedPassword } = this.state;
+    console.log('finding', String(findingFFmpeg));
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     // @if TARGET='app'
@@ -284,28 +293,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
-            {/* @if TARGET='app' */}
-            <Card
-              title={__('Transcoding')}
-              actions={
-                <React.Fragment>
-                  <FileSelector
-                    type="openDirectory"
-                    currentPath={ffmpegPath || daemonSettings.ffmpeg_folder}
-                    onFileChosen={(newDirectory: WebFile) => {
-                      this.onFFmpegFolder(newDirectory.path);
-                    }}
-                    disabled={Boolean(ffmpegPath)}
-                  />
-                  <p className="help">
-                    {ffmpegAvailable
-                      ? __('FFmpeg  is correctly configured')
-                      : __('FFmpeg could not be found. Navigate to it or Install, then quit and restart the app.')}
-                  </p>
-                </React.Fragment>
-              }
-            />
-            {/* @endif */}
+
             <Card
               title={__('Network and Data Settings')}
               actions={
@@ -668,7 +656,50 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 }
               />
             )}
-
+            {/* @if TARGET='app' */}
+            <Card
+              title={
+                <span>
+                  {__('Experimental Transcoding')}
+                  {findingFFmpeg && <Spinner type="small" />}
+                </span>
+              }
+              actions={
+                <React.Fragment>
+                  <FileSelector
+                    type="openDirectory"
+                    placeholder={__('A Folder containing FFmpeg')}
+                    currentPath={ffmpegPath || daemonSettings.ffmpeg_folder}
+                    onFileChosen={(newDirectory: WebFile) => {
+                      this.onFFmpegFolder(newDirectory.path);
+                    }}
+                    disabled={Boolean(ffmpegPath)}
+                  />
+                  <p className="help">
+                    {ffmpegAvailable ? (
+                      __('FFmpeg  is correctly configured')
+                    ) : (
+                      <I18nMessage
+                        tokens={{
+                          check_again: (
+                            <Button
+                              button="link"
+                              label={__('Check again')}
+                              onClick={() => this.findFFmpeg()}
+                              disabled={findingFFmpeg}
+                            />
+                          ),
+                        }}
+                      >
+                        FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the
+                        app.
+                      </I18nMessage>
+                    )}
+                  </p>
+                </React.Fragment>
+              }
+            />
+            {/* @endif */}
             {(!IS_WEB || isAuthenticated) && (
               <Card
                 title={__('Experimental Settings')}
