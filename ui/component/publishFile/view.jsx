@@ -7,6 +7,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
+import I18nMessage from '../i18nMessage';
 
 type Props = {
   name: ?string,
@@ -39,7 +40,6 @@ function PublishFile(props: Props) {
   } = props;
 
   const { available } = ffmpegStatus;
-
   const [duration, setDuration] = useState(0);
   const [size, setSize] = useState(0);
   const [oversized, setOversized] = useState(false);
@@ -47,6 +47,12 @@ function PublishFile(props: Props) {
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
   const UPLOAD_SIZE_MESSAGE = 'Lbrytv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
+  const PROCESSING_MB_PER_SECOND = 0.5;
+  const MINUTES_THRESHOLD = 30;
+  const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
+
+  const sizeInMB = Number(size) / 1000000;
+  const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
 
   // clear warnings
   useEffect(() => {
@@ -74,6 +80,29 @@ function PublishFile(props: Props) {
       return (s * 8) / d;
     } else {
       return 0;
+    }
+  }
+
+  function getTimeForMB(s) {
+    if (s < MINUTES_THRESHOLD) {
+      return Math.floor(secondsToProcess);
+    } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
+      return Math.floor(secondsToProcess / 60);
+    } else {
+      return Math.floor(secondsToProcess / 60 / 60);
+    }
+  }
+
+  function getUnitsForMB(s) {
+    if (s < MINUTES_THRESHOLD) {
+      if (secondsToProcess > 1) return 'seconds';
+      return 'second';
+    } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
+      if (Math.floor(secondsToProcess / 60) > 1) return 'minutes';
+      return 'minute';
+    } else {
+      if (Math.floor(secondsToProcess / 3600) > 1) return 'hours';
+      return 'hour';
     }
   }
 
@@ -240,14 +269,40 @@ function PublishFile(props: Props) {
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {getMessage()}
           {/* @if TARGET='app' */}
+
           <FormField
             type="checkbox"
             checked={isVid && available && optimize}
             disabled={!isVid || !available}
             onChange={e => updatePublishForm({ optimize: e.target.checked })}
-            label={available ? __('Optimize and transcode video') : __('FFmpeg not configured')}
+            label={
+              available ? (
+                __('Optimize and transcode video')
+              ) : (
+                <I18nMessage
+                  tokens={{
+                    settings_link: <Button button="link" navigate="/$/settings" label={__('Settings')} />,
+                  }}
+                >
+                  FFmpeg not configured. More in %settings_link%.
+                </I18nMessage>
+              )
+            }
             name="optimize"
           />
+          {Boolean(size) && optimize && isVid && (
+            <p className="help">
+              <I18nMessage
+                tokens={{
+                  size: Math.ceil(sizeInMB),
+                  processTime: getTimeForMB(sizeInMB),
+                  units: getUnitsForMB(sizeInMB),
+                }}
+              >
+                Transcoding this %size%MB file should take under %processTime% %units%.
+              </I18nMessage>
+            </p>
+          )}
           {/* @endif */}
         </React.Fragment>
       }

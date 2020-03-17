@@ -677,7 +677,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   />
                   <p className="help">
                     {ffmpegAvailable ? (
-                      __('FFmpeg  is correctly configured')
+                      <I18nMessage
+                        tokens={{
+                          learn_more: (
+                            <Button
+                              button="link"
+                              label={__('Learn more')}
+                              href="https://lbry.com/faq/video-publishing-guide#automatic"
+                            />
+                          ),
+                        }}
+                      >
+                        FFmpeg is correctly configured. %learn_more%
+                      </I18nMessage>
                     ) : (
                       <I18nMessage
                         tokens={{
@@ -689,10 +701,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                               disabled={findingFFmpeg}
                             />
                           ),
+                          learn_more: (
+                            <Button
+                              button="link"
+                              label={__('Learn more')}
+                              href="https://lbry.com/faq/video-publishing-guide#automatic"
+                            />
+                          ),
                         }}
                       >
                         FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the
-                        app.
+                        app. %learn_more%
                       </I18nMessage>
                     )}
                   </p>
