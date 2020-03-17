@@ -1068,5 +1068,6 @@
   "Transcoding this %size%MB file could take %seconds% seconds or more.": "Transcoding this %size%MB file could take %seconds% seconds or more.",
   "Transcoding this %size%MB file should take under %seconds% %units%.": "Transcoding this %size%MB file should take under %seconds% %units%.",
   "Transcoding this %size%MB file should take under %processTime% %units%.": "Transcoding this %size%MB file should take under %processTime% %units%.",
-  "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%": "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%"
+  "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%": "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%",
+  "FFmpeg not configured. More in %settings_link%.": "FFmpeg not configured. More in %settings_link%."
 }

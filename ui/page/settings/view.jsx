@@ -133,7 +133,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onFFmpegFolder(path: string) {
-    this.setDaemonSetting('ffmpeg_folder', path);
+    this.setDaemonSetting('ffmpeg_folder', path + '/');
     this.findFFmpeg();
   }
 
