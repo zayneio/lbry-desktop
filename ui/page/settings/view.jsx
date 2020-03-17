@@ -246,8 +246,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       findingFFmpeg,
     } = this.props;
     const { storedPassword } = this.state;
-    console.log('finding', String(findingFFmpeg));
-
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     // @if TARGET='app'
     const { available: ffmpegAvailable, which: ffmpegPath } = ffmpegStatus;

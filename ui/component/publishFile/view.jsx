@@ -269,28 +269,26 @@ function PublishFile(props: Props) {
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {getMessage()}
           {/* @if TARGET='app' */}
-
           <FormField
             type="checkbox"
             checked={isVid && available && optimize}
             disabled={!isVid || !available}
             onChange={e => updatePublishForm({ optimize: e.target.checked })}
-            label={
-              available ? (
-                __('Optimize and transcode video')
-              ) : (
-                <I18nMessage
-                  tokens={{
-                    settings_link: <Button button="link" navigate="/$/settings" label={__('Settings')} />,
-                  }}
-                >
-                  FFmpeg not configured. More in %settings_link%.
-                </I18nMessage>
-              )
-            }
+            label={__('Optimize and transcode video')}
             name="optimize"
           />
-          {Boolean(size) && optimize && isVid && (
+          {!available && (
+            <p className="help">
+              <I18nMessage
+                tokens={{
+                  settings_link: <Button button="link" navigate="/$/settings" label={__('Settings')} />,
+                }}
+              >
+                FFmpeg not configured. More in %settings_link%.
+              </I18nMessage>
+            </p>
+          )}
+          {Boolean(size) && available && optimize && isVid && (
             <p className="help">
               <I18nMessage
                 tokens={{
