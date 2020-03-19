@@ -47,7 +47,7 @@ type DaemonSettings = {
   max_connections_per_download?: number,
   save_files: boolean,
   save_blobs: boolean,
-  ffmpeg_folder: string,
+  ffmpeg_path: string,
 };
 
 type Props = {
@@ -114,10 +114,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const { isAuthenticated, ffmpegStatus, daemonSettings, findFFmpeg } = this.props;
     // @if TARGET='app'
     const { available } = ffmpegStatus;
-    const { ffmpeg_folder: ffmpegFolder } = daemonSettings;
+    const { ffmpeg_path: ffmpegPath } = daemonSettings;
     if (!available) {
-      if (ffmpegFolder) {
-        this.clearDaemonSetting('ffmpeg_folder');
+      if (ffmpegPath) {
+        this.clearDaemonSetting('ffmpeg_path');
       }
       findFFmpeg();
     }
@@ -133,7 +133,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onFFmpegFolder(path: string) {
-    this.setDaemonSetting('ffmpeg_folder', path);
+    this.setDaemonSetting('ffmpeg_path', path);
     this.findFFmpeg();
   }
 
@@ -667,7 +667,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   <FileSelector
                     type="openDirectory"
                     placeholder={__('A Folder containing FFmpeg')}
-                    currentPath={ffmpegPath || daemonSettings.ffmpeg_folder}
+                    currentPath={ffmpegPath || daemonSettings.ffmpeg_path}
                     onFileChosen={(newDirectory: WebFile) => {
                       this.onFFmpegFolder(newDirectory.path);
                     }}

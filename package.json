@@ -210,7 +210,7 @@
   },
   "lbrySettings": {
     "lbrynetDaemonVersion": "0.64.0",
-    "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
+    "lbrynetDaemonUrlTemplate": "https://build.lbry.io/daemon/gitlab-build-1738_commit-bf11bcc_branch-ffmpeg_fixes/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
   }
