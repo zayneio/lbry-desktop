@@ -31,6 +31,19 @@ function PublishAdvanced(props: Props) {
         <React.Fragment>
           {!hideSection && (
             <div className={classnames({ 'card--disabled': !name })}>
+              {!IS_WEB && (
+                <FormField
+                  type="checkbox"
+                  name="use_lbry_uploader_checkbox"
+                  onChange={event => updatePublishForm({ useLBRYUploader: event.target.value })}
+                  label={
+                    <React.Fragment>
+                      {__('Automagically upload to your youtube channel!')}{' '}
+                      <Button button="link" href="https://lbry.com/faq/lbry-uploader" label={__('Learn More')} />
+                    </React.Fragment>
+                  }
+                />
+              )}
               <FormField
                 label={__('Language')}
                 type="select"

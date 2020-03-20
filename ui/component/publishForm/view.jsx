@@ -53,6 +53,7 @@ type Props = {
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
   uri: ?string,
+  useLBRYUploader: ?boolean,
   publishing: boolean,
   balance: number,
   isStillEditing: boolean,
@@ -148,32 +149,32 @@ function PublishForm(props: Props) {
           <PublishText disabled={formDisabled} />
           <Card actions={<SelectThumbnail />} />
 
-        <TagsSelect
-          suggestMature
-          disableAutoFocus
-          hideHeader
-          label={__('Selected Tags')}
-          empty={__('No tags added')}
-          limitSelect={TAGS_LIMIT}
-          help={__(
-            'Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.'
-          )}
-          placeholder={__('gaming, crypto')}
-          onSelect={newTags => {
-            const validatedTags = [];
-            newTags.forEach(newTag => {
-              if (!tags.some(tag => tag.name === newTag.name)) {
-                validatedTags.push(newTag);
-              }
-            });
-            updatePublishForm({ tags: [...tags, ...validatedTags] });
-          }}
-          onRemove={clickedTag => {
-            const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
-            updatePublishForm({ tags: newTags });
-          }}
-          tagsChosen={tags}
-        />
+          <TagsSelect
+            suggestMature
+            disableAutoFocus
+            hideHeader
+            label={__('Selected Tags')}
+            empty={__('No tags added')}
+            limitSelect={TAGS_LIMIT}
+            help={__(
+              'Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.'
+            )}
+            placeholder={__('gaming, crypto')}
+            onSelect={newTags => {
+              const validatedTags = [];
+              newTags.forEach(newTag => {
+                if (!tags.some(tag => tag.name === newTag.name)) {
+                  validatedTags.push(newTag);
+                }
+              });
+              updatePublishForm({ tags: [...tags, ...validatedTags] });
+            }}
+            onRemove={clickedTag => {
+              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+              updatePublishForm({ tags: newTags });
+            }}
+            tagsChosen={tags}
+          />
 
           <Card
             actions={
