@@ -8,6 +8,7 @@ import Button from 'component/button';
 import ThumbnailMissingImage from './thumbnail-missing.png';
 import ThumbnailBrokenImage from './thumbnail-broken.png';
 import I18nMessage from 'component/i18nMessage';
+import ErrorText from 'component/common/error-text';
 
 type Props = {
   filePath: ?string,
@@ -24,6 +25,7 @@ type Props = {
 
 type State = {
   thumbnailError: boolean,
+  errorText: ?string,
 };
 
 class SelectThumbnail extends React.PureComponent<Props, State> {
@@ -32,6 +34,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
     this.state = {
       thumbnailError: false,
+      errorText: null,
     };
 
     (this: any).handleThumbnailChange = this.handleThumbnailChange.bind(this);
@@ -40,9 +43,12 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
   handleThumbnailChange(e: SyntheticInputEvent<*>) {
     const { updatePublishForm } = this.props;
     const newThumbnail = e.target.value.replace(' ', '');
-
+    if (newThumbnail.startsWith('http:')) {
+      this.setState({ errorText: 'Thumbnails must use https://', thumbnailError: true });
+    } else {
+      this.setState({ errorText: null, thumbnailError: false });
+    }
     updatePublishForm({ thumbnail: newThumbnail });
-    this.setState({ thumbnailError: false });
   }
 
   render() {
@@ -170,8 +176,12 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
         {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
         <p className="help">
-          {status === THUMBNAIL_STATUSES.API_DOWN ? (
-            __('Enter a URL for your thumbnail.')
+          {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
+            !this.state.errorText ? (
+              __('Enter a URL for your thumbnail.')
+            ) : (
+              <ErrorText>{this.state.errorText && __(this.state.errorText)}</ErrorText>
+            )
           ) : (
             <I18nMessage
               tokens={{
