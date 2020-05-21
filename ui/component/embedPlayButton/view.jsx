@@ -16,6 +16,7 @@ type Props = {
   floatingPlayerEnabled: boolean,
   doPlayUri: (string, ?boolean, ?boolean, (GetResponse) => void) => void,
   doAnaltyicsPurchaseEvent: GetResponse => void,
+  fileInfo: FileListItem,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -29,6 +30,7 @@ export default function FileRenderFloating(props: Props) {
     floatingPlayerEnabled,
     doPlayUri,
     doAnaltyicsPurchaseEvent,
+    fileInfo,
   } = props;
   const { push } = useHistory();
   const isMobile = useIsMobile();
