@@ -1,4 +1,3 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { PAGE_SIZE } from 'constants/claim';
 import {
@@ -8,6 +7,7 @@ import {
   makeSelectTotalPagesInChannelSearch,
   selectChannelIsBlocked,
   makeSelectClaimForUri,
+  SETTINGS,
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
