@@ -277,6 +277,10 @@ const Header = (props: Props) => {
                           <Icon aria-hidden icon={ICONS.CHANNEL} />
                           {__('New Channel')}
                         </MenuLink>
+                        <MenuLink className="menu__link" as="a" href="https://lbry.com/youtube" target="_blank">
+                          <Icon aria-hidden icon={ICONS.YOUTUBE} />
+                          {__('Sync YouTube Channel')}
+                        </MenuLink>
                       </MenuList>
                     </Menu>
 
