@@ -70,6 +70,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
 
     return (
       <Card
+        className="file-page__recommended"
         isBodyList
         title={__('Related')}
         body={

@@ -153,25 +153,25 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page className="file-page">
-        <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
-          {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
-        </div>
         <div className="section columns">
-          <div className="card-stack">
-            <FileDescription uri={uri} />
-            <FileValues uri={uri} />
-            <FileDetails uri={uri} />
-            <Card
-              title={__('Leave a Comment')}
-              actions={
-                <div>
-                  <CommentCreate uri={uri} />
-                  <WaitUntilOnPage lastUpdateDate={this.lastReset}>
-                    <CommentsList uri={uri} />
-                  </WaitUntilOnPage>
-                </div>
-              }
-            />
+          <div>
+            <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+              {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
+              <FileDescription uri={uri} />
+              <FileValues uri={uri} />
+              <FileDetails uri={uri} />
+              <Card
+                title={__('Leave a Comment')}
+                actions={
+                  <div>
+                    <CommentCreate uri={uri} />
+                    <WaitUntilOnPage lastUpdateDate={this.lastReset}>
+                      <CommentsList uri={uri} />
+                    </WaitUntilOnPage>
+                  </div>
+                }
+              />
+            </div>
           </div>
           <RecommendedContent uri={uri} />
         </div>
