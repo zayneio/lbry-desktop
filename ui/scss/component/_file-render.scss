@@ -1,4 +1,7 @@
 .file-page {
+  @extend .section;
+  @extend .columns;
+
   .file-page__video-container + .card,
   .file-render + .card,
   .content__cover + .card,
@@ -30,10 +33,18 @@
       }
     }
   }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+  }
 }
 
 .file-page__recommended {
   max-width: 30rem;
+
+  @media (max-width: $breakpoint-large) {
+    max-width: 25rem;
+  }
 }
 
 .file-render {

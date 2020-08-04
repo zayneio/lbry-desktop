@@ -19,6 +19,7 @@ type Props = {
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
+  fullWidth: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -35,13 +36,14 @@ function Page(props: Props) {
     noHeader = false,
     noFooter = false,
     noSideNavigation = false,
+    fullWidth = false,
     backout,
   } = props;
 
   return (
     <Fragment>
       {!noHeader && <Header authHeader={authPage} backout={backout} />}
-      <div className={classnames('main-wrapper__inner')}>
+      <div className={classnames('main-wrapper__inner', { 'main-wrapper__inner--full': fullWidth })}>
         {!authPage && !noSideNavigation && <SideNavigation />}
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
         {/* @if TARGET='app' */}
