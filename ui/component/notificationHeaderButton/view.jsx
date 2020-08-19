@@ -21,7 +21,7 @@ export default function NotificationHeaderButton(props: Props) {
   const {
     unreadCount,
     // notifications,
-    fetching,
+    // fetching,
     doReadNotifications,
     user,
   } = props;
@@ -43,7 +43,6 @@ export default function NotificationHeaderButton(props: Props) {
   return (
     <Button
       onClick={handleMenuClick}
-      disabled={fetching}
       aria-label={__('Notifications')}
       title={__('Notifications')}
       className="header__navigation-item menu__title header__navigation-item--icon"
