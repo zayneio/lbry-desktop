@@ -25,7 +25,7 @@ type Props = {
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
-  fullWidth: boolean,
+  fullWidthPage: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -38,9 +38,9 @@ function Page(props: Props) {
   const {
     children,
     className,
-    authPage = false,
     filePage = false,
-    homePage = false,
+    authPage = false,
+    fullWidthPage = false,
     noHeader = false,
     noFooter = false,
     noSideNavigation = false,
@@ -92,9 +92,9 @@ function Page(props: Props) {
         )}
         <main
           className={classnames(MAIN_CLASS, className, {
-            'main--full-width': authPage,
+            'main--full-width': fullWidthPage,
+            'main--auth-page': authPage,
             'main--file-page': filePage,
-            'main--homepage': homePage,
           })}
         >
           {children}
