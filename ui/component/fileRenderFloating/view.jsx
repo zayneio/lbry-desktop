@@ -140,6 +140,8 @@ export default function FileRenderFloating(props: Props) {
             <FileRender
               className="draggable"
               uri={uri}
+              setVideoTheaterMode={props.setVideoTheaterMode}
+              videoTheaterMode={props.videoTheaterMode}
               // @if TARGET='app'
               desktopPlayStartTime={desktopPlayStartTime}
               // @endif

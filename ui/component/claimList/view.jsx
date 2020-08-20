@@ -36,6 +36,7 @@ type Props = {
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
+  isCardBody?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -59,6 +60,7 @@ export default function ClaimList(props: Props) {
     injectedItem,
     timedOutMessage,
     tileLayout = false,
+    isCardBody = false,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -130,7 +132,7 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul
           className={classnames('ul--no-style', {
-            card: !tileLayout,
+            card: !tileLayout && !isCardBody,
             'claim-list--card-body': tileLayout,
           })}
         >

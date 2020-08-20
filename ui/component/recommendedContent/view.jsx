@@ -72,6 +72,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
         title={__('Related')}
         body={
           <ClaimList
+            isCardBody
             type="small"
             loading={isSearching}
             uris={recommendedContent}

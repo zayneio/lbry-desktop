@@ -112,6 +112,7 @@ function App(props: Props) {
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
+  const [videoTheaterMode, setVideoTheaterMode] = useState(false);
   // @if TARGET='web'
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
@@ -297,10 +298,10 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-          <Router />
+          <Router videoTheaterMode={videoTheaterMode} setVideoTheaterMode={videoTheaterMode} />
           <ModalRouter />
           <FileDrop />
-          <FileRenderFloating />
+          <FileRenderFloating videoTheaterMode={videoTheaterMode} setVideoTheaterMode={setVideoTheaterMode} />
           {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
           {/* @if TARGET='app' */}

@@ -113,7 +113,7 @@ function ShowPage(props: Props) {
         </Page>
       );
     } else {
-      innerContent = <FilePage uri={uri} location={location} />;
+      innerContent = <FilePage uri={uri} location={location} videoTheaterMode={props.videoTheaterMode} />;
     }
   }
 

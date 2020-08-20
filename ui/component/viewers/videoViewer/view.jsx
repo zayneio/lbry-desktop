@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import type { Player } from './internal/videojs';
 import VideoJs from './internal/videojs';
+import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
@@ -132,6 +133,18 @@ function VideoViewer(props: Props) {
       if (!embedded) {
         player.muted(muted);
         player.volume(volume);
+
+        var myButton = player.controlBar.addChild('button', {
+          text: 'Theater mode',
+          clickHandler: () => {
+            props.setVideoTheaterMode(!props.videoTheaterMode);
+          },
+          //   innerHTML: "<span class='icon icon--videojs-theater />",
+          // other options
+        });
+
+        myButton.addClass('button--videojs-icon');
+        myButton.innerHTML = "<span class='icon icon--videojs-theater />";
       }
 
       const shouldPlay = !embedded || autoplayIfEmbedded;

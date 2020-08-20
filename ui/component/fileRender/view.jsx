@@ -87,6 +87,8 @@ class FileRender extends React.PureComponent<Props> {
             source={source}
             contentType={contentType}
             desktopPlayStartTime={desktopPlayStartTime}
+            setVideoTheaterMode={this.props.setVideoTheaterMode}
+            videoTheaterMode={this.props.videoTheaterMode}
           />
         );
       case RENDER_MODES.IMAGE:

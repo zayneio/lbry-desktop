@@ -23,6 +23,7 @@ export type Player = {
   ended: () => boolean,
   error: () => any,
   loadingSpinner: any,
+  addChild: any => void,
 };
 
 type Props = {

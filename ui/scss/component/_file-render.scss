@@ -493,3 +493,13 @@
 .autoplay-countdown__button--1 {
   border-color: #fff;
 }
+
+.file-page__info {
+  display: flex;
+  margin-top: var(--spacing-m);
+
+  .file-page__recommended {
+    width: 50rem !important;
+    margin-left: var(--spacing-s);
+  }
+}

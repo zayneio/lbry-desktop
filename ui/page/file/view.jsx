@@ -91,7 +91,6 @@ class FilePage extends React.Component<Props> {
             <FileRenderInitiator uri={uri} />
           </div>
           {/* playables will be rendered and injected by <FileRenderFloating> */}
-          <FileTitle uri={uri} />
         </React.Fragment>
       );
     }
@@ -133,36 +132,53 @@ class FilePage extends React.Component<Props> {
     );
   }
 
+  setTheaterMode() {
+    this.setState({ theaterMode: !this.state.theaterMode });
+  }
+
   lastReset: ?any;
 
   render() {
-    const { uri, renderMode, costInfo, obscureNsfw, isMature } = this.props;
+    const { uri, renderMode, costInfo, obscureNsfw, isMature, videoTheaterMode } = this.props;
 
     if (obscureNsfw && isMature) {
       return this.renderBlockedPage();
     }
+    // Start on
+    // functionize this component so we can use a useCallback for the handler
+    // that's maybe not needed
+    // change this to grid layout
 
     return (
       <Page className="file-page" filePage>
-        <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+        <div
+          className={classnames('section card-stack', `file-page__${renderMode}`, {
+            'file-page__video--theater': renderMode === RENDER_MODES.VIDEO && videoTheaterMode,
+          })}
+        >
           {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
-          <FileDescription uri={uri} />
-          <FileValues uri={uri} />
-          <FileDetails uri={uri} />
-          <Card
-            title={__('Leave a Comment')}
-            actions={
-              <div>
-                <CommentCreate uri={uri} />
-                <WaitUntilOnPage lastUpdateDate={this.lastReset}>
-                  <CommentsList uri={uri} />
-                </WaitUntilOnPage>
-              </div>
-            }
-          />
+          <div className="file-page__info">
+            <div>
+              {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitle uri={uri} />}
+              <FileDescription uri={uri} />
+              <FileValues uri={uri} />
+              <FileDetails uri={uri} />
+              <Card
+                title={__('Leave a Comment')}
+                actions={
+                  <div>
+                    <CommentCreate uri={uri} />
+                    <WaitUntilOnPage lastUpdateDate={this.lastReset}>
+                      <CommentsList uri={uri} />
+                    </WaitUntilOnPage>
+                  </div>
+                }
+              />
+            </div>
+            {videoTheaterMode && <RecommendedContent uri={uri} />}
+          </div>
         </div>
-
-        <RecommendedContent uri={uri} />
+        {!videoTheaterMode && <RecommendedContent uri={uri} />}
       </Page>
     );
   }
