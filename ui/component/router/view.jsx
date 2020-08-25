@@ -79,6 +79,7 @@ function PrivateRoute(props: PrivateRouteProps) {
 type Props = {
   currentScroll: number,
   isAuthenticated: boolean,
+  user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, search: string },
   history: {
     entries: { title: string }[],
@@ -97,8 +98,12 @@ type Props = {
   welcomeVersion: number,
   hasNavigated: boolean,
   setHasNavigated: () => void,
-  syncSettings: () => void,
+  pushSettingsToPrefs: () => void,
   checkSync: () => void,
+  syncEnabled: boolean,
+  updatePreferences: () => void,
+  syncSubscribe: () => void,
+  syncUnsubscribe: () => void,
 };
 
 function AppRouter(props: Props) {
@@ -112,14 +117,11 @@ function AppRouter(props: Props) {
     welcomeVersion,
     hasNavigated,
     setHasNavigated,
-    syncSettings,
-    checkSync,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
-  const [prevPath, setPrevPath] = React.useState(pathname);
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
@@ -130,27 +132,6 @@ function AppRouter(props: Props) {
     });
     return unlisten;
   }, [hasNavigated, setHasNavigated]);
-
-  // Sync when no longer on a settings page, or when entering settings pages
-  useEffect(() => {
-    const unlisten = history.listen(location => {
-      if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
-        syncSettings();
-      } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
-        checkSync();
-      }
-    });
-    return unlisten;
-  }, [prevPath, syncSettings, checkSync]);
-
-  useEffect(() => {
-    const unlisten = history.listen(location => {
-      if (prevPath !== location.pathname && setPrevPath) {
-        setPrevPath(location.pathname);
-      }
-    });
-    return unlisten;
-  }, [prevPath, setPrevPath]);
 
   useEffect(() => {
     if (uri) {

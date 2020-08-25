@@ -22,13 +22,13 @@ function SyncPassword(props: Props) {
   const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
   function handleSubmit() {
-    getSync(password, (error, hasDataChanged) => {
+    getSync((error, hasDataChanged) => {
       handleSyncComplete(error, hasDataChanged);
 
       if (!error) {
         setSavedPassword(password, rememberPassword);
       }
-    });
+    }, password);
   }
 
   return (

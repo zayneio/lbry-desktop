@@ -37,7 +37,7 @@ type Props = {
   },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
-  setClientSetting: (string, boolean | string) => void,
+  setClientSetting: (string, boolean | string, ?boolean) => void,
   hideBalance: boolean,
   email: ?string,
   authenticated: boolean,
@@ -56,7 +56,6 @@ type Props = {
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
-  syncSettings: () => void,
   sidebarOpen: boolean,
   setSidebarOpen: boolean => void,
   isAbsoluteSideNavHidden: boolean,
@@ -80,7 +79,6 @@ const Header = (props: Props) => {
     clearPasswordEntry,
     emailToVerify,
     backout,
-    syncSettings,
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
@@ -129,8 +127,10 @@ const Header = (props: Props) => {
     if (e.type !== 'popstate') {
       // if not initiated by pop (back button)
       if (hasNavigated && !backNavDefault) {
+        console.log('go back, hasnav-', hasNavigated);
         goBack();
       } else {
+        console.log('replace-');
         replace(backNavDefault || `/`);
       }
     }
@@ -145,15 +145,14 @@ const Header = (props: Props) => {
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
-      setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false);
+      setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false, true);
     }
 
     if (currentTheme === 'dark') {
-      setClientSetting(SETTINGS.THEME, 'light');
+      setClientSetting(SETTINGS.THEME, 'light', true);
     } else {
-      setClientSetting(SETTINGS.THEME, 'dark');
+      setClientSetting(SETTINGS.THEME, 'dark', true);
     }
-    syncSettings();
   }
 
   function getWalletTitle() {

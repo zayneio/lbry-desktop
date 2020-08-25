@@ -46,11 +46,11 @@ import {
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doGetSync } from 'lbryinc';
+import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
-import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
+import { doSignOutCleanup, deleteSavedPassword } from 'util/saved-passwords';
 import { doSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 import sha256 from 'crypto-js/sha256';
@@ -86,6 +86,13 @@ export function doUpdateDownloadProgress(percent) {
     data: {
       percent,
     },
+  };
+}
+
+export function doSetSyncLock(lock) {
+  return {
+    type: ACTIONS.SET_SYNC_LOCK,
+    data: lock,
   };
 }
 
@@ -584,6 +591,9 @@ export function doToggle3PAnalytics(allowParam, doNotDispatch) {
 }
 
 export function doGetAndPopulatePreferences() {
+  // when sign in is ready
+  // if syncEnabled and syncAvailable
+  //  getSync, syncApply,
   const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
   return (dispatch, getState) => {
@@ -600,28 +610,33 @@ export function doGetAndPopulatePreferences() {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
 
+      console.log('DGAP SUCCESS -savedPrefs', savedPreferences);
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
 
         const { settings } = savedPreferences.value;
-        Object.entries(settings).forEach(([key, val]) => {
-          if (SDK_SYNC_KEYS.includes(key)) {
-            if (shouldSetSetting(key, val, daemonSettings[key])) {
-              if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
-                const servers = stringifyServerParam(val);
-                dispatch(doSetDaemonSetting(key, servers, true));
-              } else {
-                dispatch(doSetDaemonSetting(key, val, true));
+        if (settings) {
+          Object.entries(settings).forEach(([key, val]) => {
+            if (SDK_SYNC_KEYS.includes(key)) {
+              if (shouldSetSetting(key, val, daemonSettings[key])) {
+                if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
+                  const servers = stringifyServerParam(val);
+                  dispatch(doSetDaemonSetting(key, servers, true));
+                } else {
+                  dispatch(doSetDaemonSetting(key, val, true));
+                }
               }
             }
-          }
-        });
+          });
+        }
         // @endif
       }
+      return true;
     }
 
-    function failCb() {
+    function failCb(e) {
+      console.log('sync fail message-', e);
       deleteSavedPassword().then(() => {
         dispatch(
           doToast({
@@ -630,13 +645,17 @@ export function doGetAndPopulatePreferences() {
           })
         );
       });
+      return false;
     }
 
-    doPreferenceGet(preferenceKey, successCb, failCb);
+    return doPreferenceGet(preferenceKey, successCb, failCb);
   };
 }
 
 export function doHandleSyncComplete(error, hasNewData) {
+  console.log('dohandlesync err', error);
+  console.log('dohandlesync hasnewdata', hasNewData);
+
   return dispatch => {
     if (!error) {
       dispatch(doGetAndPopulatePreferences());
@@ -650,11 +669,5 @@ export function doHandleSyncComplete(error, hasNewData) {
 }
 
 export function doSyncWithPreferences() {
-  return dispatch => {
-    return getSavedPassword().then(password => {
-      const passwordArgument = password === null ? '' : password;
-
-      dispatch(doGetSync(passwordArgument, (error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
-    });
-  };
+  return dispatch => dispatch(doSyncSubscribe());
 }

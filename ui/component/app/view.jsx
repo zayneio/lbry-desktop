@@ -38,7 +38,6 @@ export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
 // @endif
-const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 // button numbers pulled from https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 const MOUSE_BACK_BTN = 3;
@@ -67,17 +66,20 @@ type Props = {
   setLanguage: string => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
-  checkSync: () => void,
-  updatePreferences: () => void,
-  syncEnabled: boolean,
+  updatePreferences: () => Promise<any>,
+  updateSyncPref: () => void,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
+  syncEnabled: boolean,
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
   analyticsTagSync: () => void,
   isAuthenticated: boolean,
   socketConnect: () => void,
+  syncSubscribe: () => void,
+  syncEnabled: boolean,
+  signInSyncPref: boolean,
 };
 
 function App(props: Props) {
@@ -90,8 +92,6 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
-    syncEnabled,
-    checkSync,
     uploadCount,
     history,
     syncError,
@@ -99,16 +99,21 @@ function App(props: Props) {
     languages,
     setLanguage,
     updatePreferences,
+    updateSyncPref,
     rewards,
     setReferrer,
-    analyticsTagSync,
     isAuthenticated,
+    syncSubscribe,
+    signInSyncPref,
   } = props;
 
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
+  const [readyForSync, setReadyForSync] = useState(false);
+  const [readyForPrefs, setReadyForPrefs] = useState(false);
   const hasVerifiedEmail = user && user.has_verified_email;
+
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
@@ -196,12 +201,12 @@ function App(props: Props) {
       ReactModal.setAppElement(wrapperElement);
     }
 
-    fetchAccessToken();
+    // fetchAccessToken();
 
     // @if TARGET='app'
     fetchChannelListMine(); // This is fetched after a user is signed in on web
     // @endif
-  }, [appRef, fetchAccessToken, fetchChannelListMine]);
+  }, [appRef, fetchChannelListMine]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -229,35 +234,43 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // Keep this at the end to ensure initial setup effects are run first
-  useEffect(() => {
-    if (!hasSignedIn && hasVerifiedEmail) {
-      signIn();
-      setHasSignedIn(true);
-    }
-  }, [hasVerifiedEmail, signIn, hasSignedIn]);
-
   // @if TARGET='app'
   useEffect(() => {
-    updatePreferences();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (updatePreferences && readyForPrefs) {
+      updatePreferences().then(() => {
+        updateSyncPref(true); // only set when false so as to not overwrite timestamp?
+        setReadyForSync(true);
+      });
+    }
+  }, [updatePreferences, setReadyForSync, readyForPrefs, hasVerifiedEmail, updateSyncPref]);
   // @endif
 
+  // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
-    if (hasVerifiedEmail && syncEnabled) {
-      checkSync();
-      analyticsTagSync();
-      let syncInterval = setInterval(() => {
-        checkSync();
-      }, SYNC_INTERVAL);
-
-      return () => {
-        clearInterval(syncInterval);
-      };
+    console.log('syncEffect');
+    //
+    if (readyForSync && hasVerifiedEmail) {
+      // Copy sync checkbox to settings and push to preferences
+      // before sync if false, after sync if true so as not to change timestamp.
+      if (signInSyncPref === false) {
+        updateSyncPref();
+      }
+      syncSubscribe();
+      if (signInSyncPref === true) {
+        updateSyncPref();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, syncEnabled, checkSync]);
+  }, [readyForSync, hasVerifiedEmail, signInSyncPref, updateSyncPref]);
+
+  // We know someone is logging in or not when we get their user object {}
+  // We'll use this to determine when it's time to pull preferences
+  // This will no longer work if desktop users no longer get a user object from lbryinc
+  useEffect(() => {
+    if (user) {
+      setReadyForPrefs(true);
+    }
+  }, [user, setReadyForPrefs]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
@@ -265,6 +278,15 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname, isAuthenticated]);
+
+  // Keep this at the end to ensure initial setup effects are run first
+  useEffect(() => {
+    if (!hasSignedIn && hasVerifiedEmail) {
+      signIn();
+      setHasSignedIn(true);
+      if (IS_WEB) setReadyForSync(true);
+    }
+  }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   // @if TARGET='web'
   useDegradedPerformance(setLbryTvApiStatus);
