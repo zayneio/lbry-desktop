@@ -41,19 +41,16 @@ export const doGetSyncDesktop = (cb?: () => void) => (dispatch: Dispatch, getSta
 };
 
 export function doSyncSubscribe() {
-  console.log('DSS');
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     if (syncEnabled) {
       dispatch(doGetSyncDesktop(doHandleSyncComplete));
       dispatch(doAnalyticsTagSync());
-      console.log('sync subscription running');
     }
     syncTimer = setInterval(() => {
       const state = getState();
       const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-      console.log('trying sync interval');
       if (syncEnabled) {
         dispatch(doGetSyncDesktop(doHandleSyncComplete));
         dispatch(doAnalyticsTagSync());
@@ -64,7 +61,6 @@ export function doSyncSubscribe() {
 
 export function doSyncUnsubscribe() {
   return (dispatch: Dispatch) => {
-    console.log('sync subscriptoin stopped');
     if (syncTimer) {
       clearInterval(syncTimer);
     }

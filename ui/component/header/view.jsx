@@ -127,10 +127,8 @@ const Header = (props: Props) => {
     if (e.type !== 'popstate') {
       // if not initiated by pop (back button)
       if (hasNavigated && !backNavDefault) {
-        console.log('go back, hasnav', hasNavigated);
         goBack();
       } else {
-        console.log('replace');
         replace(backNavDefault || `/`);
       }
     }

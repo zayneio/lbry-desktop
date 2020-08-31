@@ -600,7 +600,6 @@ export function doGetAndPopulatePreferences() {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
 
-      console.log('DGAP SUCCESS savedPrefs', savedPreferences);
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
@@ -626,7 +625,6 @@ export function doGetAndPopulatePreferences() {
     }
 
     function failCb(e) {
-      console.log('sync fail message', e);
       deleteSavedPassword().then(() => {
         dispatch(
           doToast({

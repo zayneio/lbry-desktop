@@ -154,14 +154,10 @@ function AppRouter(props: Props) {
   // Sync when no longer on a settings page, or when entering settings pages
   useEffect(() => {
     const unlisten = history.listen(location => {
-      console.log('location pathname', location.pathname);
-      console.log('prevpath pathname', prevPath);
       if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
         syncSubscribe();
-        console.log('settings sub');
         pushSettingsToPrefs();
       } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
-        console.log('settings unsub');
         syncUnsubscribe();
         if (syncEnabled && hasVerifiedEmail) {
           checkSync();

@@ -254,7 +254,10 @@ function App(props: Props) {
   // This will no longer work if desktop users no longer get a user object from lbryinc
   useEffect(() => {
     if (user) {
-      setReadyForPrefs(true);
+      // user == string is actually a bug - fix it later
+      if (typeof user === 'string' || hasVerifiedEmail) {
+        setReadyForPrefs(true);
+      }
     }
   }, [user, setReadyForPrefs, hasVerifiedEmail]);
 
