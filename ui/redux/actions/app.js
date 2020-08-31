@@ -643,6 +643,9 @@ export function doGetAndPopulatePreferences() {
 }
 
 export function doHandleSyncComplete(error, hasNewData) {
+  console.log('dohandlesync err', error);
+  console.log('dohandlesync hnd', hasNewData);
+
   return dispatch => {
     if (!error) {
       dispatch(doGetAndPopulatePreferences());

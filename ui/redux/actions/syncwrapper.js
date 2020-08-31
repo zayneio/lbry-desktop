@@ -47,7 +47,6 @@ export function doSyncSubscribe() {
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     console.log('syncen', syncEnabled);
     if (syncEnabled) {
-      console.log('populate');
       dispatch(doGetSyncDesktop((error, hasNewData) => doHandleSyncComplete(error, hasNewData)));
       dispatch(doAnalyticsTagSync());
       console.log('sync subscription running-');
@@ -57,7 +56,7 @@ export function doSyncSubscribe() {
       const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
       console.log('trying sync interval-');
       if (syncEnabled) {
-        dispatch(doGetSyncDesktop((error, hasNewData) => doHandleSyncComplete(error, hasNewData)));
+        dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
         dispatch(doAnalyticsTagSync());
       }
     }, SYNC_INTERVAL);
