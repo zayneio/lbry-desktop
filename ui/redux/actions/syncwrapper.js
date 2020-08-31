@@ -5,7 +5,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting, doPushSettingsToPrefs } from 'redux/actions/settings';
 import { doToast } from 'redux/actions/notifications';
 import { getSavedPassword } from 'util/saved-passwords';
-import { doAnalyticsTagSync } from 'redux/actions/app';
+import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
 
 let syncTimer = null;
 // const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
@@ -46,7 +46,7 @@ export function doSyncSubscribe() {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     if (syncEnabled) {
-      dispatch(doGetSyncDesktop());
+      dispatch(doGetSyncDesktop(doHandleSyncComplete));
       dispatch(doAnalyticsTagSync());
       console.log('sync subscription running');
     }
@@ -55,7 +55,7 @@ export function doSyncSubscribe() {
       const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
       console.log('trying sync interval');
       if (syncEnabled) {
-        dispatch(doGetSyncDesktop());
+        dispatch(doGetSyncDesktop(doHandleSyncComplete));
         dispatch(doAnalyticsTagSync());
       }
     }, SYNC_INTERVAL);
