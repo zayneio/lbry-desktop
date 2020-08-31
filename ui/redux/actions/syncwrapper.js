@@ -8,8 +8,7 @@ import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
 
 let syncTimer = null;
-// const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
-const SYNC_INTERVAL = 5000; // 5 minutes
+const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 export const doGetSyncDesktop = (cb?: () => void) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
@@ -44,15 +43,17 @@ export function doSyncSubscribe() {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    console.log('syncen', syncEnabled);
     if (syncEnabled) {
-      dispatch(doGetSyncDesktop(doHandleSyncComplete));
+      console.log('populate');
+      dispatch(doGetSyncDesktop((error, hasNewData) => doHandleSyncComplete(error, hasNewData)));
       dispatch(doAnalyticsTagSync());
     }
     syncTimer = setInterval(() => {
       const state = getState();
       const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
       if (syncEnabled) {
-        dispatch(doGetSyncDesktop(doHandleSyncComplete));
+        dispatch(doGetSyncDesktop((error, hasNewData) => doHandleSyncComplete(error, hasNewData)));
         dispatch(doAnalyticsTagSync());
       }
     }, SYNC_INTERVAL);
