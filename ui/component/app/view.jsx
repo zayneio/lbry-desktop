@@ -38,7 +38,6 @@ export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
 // @endif
-const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 // button numbers pulled from https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 const MOUSE_BACK_BTN = 3;
@@ -67,10 +66,8 @@ type Props = {
   setLanguage: string => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
-  checkSync: () => void,
   updatePreferences: () => Promise<any>,
   updateSyncPref: () => void,
-  syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -79,6 +76,7 @@ type Props = {
   analyticsTagSync: () => void,
   isAuthenticated: boolean,
   socketConnect: () => void,
+  syncSubscribe: () => void,
 };
 
 function App(props: Props) {
@@ -91,8 +89,6 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
-    checkSync,
-    syncEnabled,
     uploadCount,
     history,
     syncError,
@@ -103,8 +99,8 @@ function App(props: Props) {
     updateSyncPref,
     rewards,
     setReferrer,
-    analyticsTagSync,
     isAuthenticated,
+    syncSubscribe,
   } = props;
 
   const appRef = useRef();
@@ -246,28 +242,19 @@ function App(props: Props) {
   // @endif
 
   useEffect(() => {
-    if (readyForSync && syncEnabled) {
-      checkSync();
-      analyticsTagSync();
-      let syncInterval = setInterval(() => {
-        checkSync();
-      }, SYNC_INTERVAL);
-
-      return () => {
-        clearInterval(syncInterval);
-      };
+    if (readyForSync) {
+      // we need this to check syncEnabled.
+      syncSubscribe();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkSync, readyForSync, syncEnabled]);
+  }, [readyForSync]);
 
   // Currently we know someone is logging in or not when we get their user object {}
   // We'll use this to determine when it's time to pull preferences
   // This will no longer work if desktop users no longer get a user object from lbryinc
   useEffect(() => {
     if (user) {
-      if (typeof user === 'object' || typeof user === 'string') {
-        setReadyForPrefs(true);
-      }
+      setReadyForPrefs(true);
     }
   }, [user, setReadyForPrefs, hasVerifiedEmail]);
 

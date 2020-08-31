@@ -218,9 +218,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       <HelpLink href="https://lbry.com/faq/account-sync" />
                     </>
                   ) : (
-                    __(
-                      "Encrypted wallet: To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock."
-                    )
+                    __("To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.")
                   )
                 ) : null
               }

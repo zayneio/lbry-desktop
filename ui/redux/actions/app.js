@@ -660,7 +660,7 @@ export function doSyncWithPreferences() {
     return getSavedPassword().then(password => {
       const passwordArgument = password === null ? '' : password;
 
-      dispatch(
+      return dispatch(
         doGetSyncDesktop(passwordArgument, (error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData)))
       );
     });

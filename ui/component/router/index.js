@@ -4,6 +4,7 @@ import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion 
 import Router from './view';
 import { normalizeURI, makeSelectTitleForUri, SETTINGS } from 'lbry-redux';
 import { doSetHasNavigated, doSyncWithPreferences, doGetAndPopulatePreferences } from 'redux/actions/app';
+import { doSyncSubscribe, doSyncUnsubscribe } from 'redux/actions/syncwrapper';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doPushSettingsToPrefs } from 'redux/actions/settings';
 const select = state => {
@@ -37,6 +38,8 @@ const select = state => {
 
 const perform = dispatch => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
+  syncSubscribe: () => dispatch(doSyncSubscribe()),
+  syncUnsubscribe: () => dispatch(doSyncUnsubscribe()),
   pushSettingsToPrefs: () => dispatch(doPushSettingsToPrefs()),
   checkSync: () => dispatch(doSyncWithPreferences()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),

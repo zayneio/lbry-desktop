@@ -8,10 +8,10 @@ import { doFetchChannelListMine, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doSetLanguage, doUpdateSyncPref } from 'redux/actions/settings';
+import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import {
   doDownloadUpgradeRequested,
   doSignIn,
-  doSyncWithPreferences,
   doGetAndPopulatePreferences,
   doAnalyticsTagSync,
 } from 'redux/actions/app';
@@ -29,7 +29,6 @@ const select = state => ({
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
 });
 
 const perform = dispatch => ({
@@ -39,9 +38,9 @@ const perform = dispatch => ({
   setLanguage: language => dispatch(doSetLanguage(language)),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
-  checkSync: () => dispatch(doSyncWithPreferences()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
   updateSyncPref: () => dispatch(doUpdateSyncPref()),
+  syncSubscribe: () => dispatch(doSyncSubscribe()),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });
 

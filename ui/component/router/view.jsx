@@ -102,6 +102,8 @@ type Props = {
   checkSync: () => void,
   syncEnabled: boolean,
   updatePreferences: () => void,
+  syncSubscribe: () => void,
+  syncUnsubscribe: () => void,
 };
 
 function AppRouter(props: Props) {
@@ -120,6 +122,8 @@ function AppRouter(props: Props) {
     updatePreferences,
     checkSync,
     user,
+    syncSubscribe,
+    syncUnsubscribe,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
@@ -142,8 +146,12 @@ function AppRouter(props: Props) {
   useEffect(() => {
     const unlisten = history.listen(location => {
       if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
+        console.log('settings sub');
+        syncSubscribe();
         pushSettingsToPrefs();
       } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
+        console.log('settings unsub');
+        syncUnsubscribe();
         if (syncEnabled && hasVerifiedEmail) {
           checkSync();
         } else {
