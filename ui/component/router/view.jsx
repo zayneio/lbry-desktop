@@ -142,12 +142,23 @@ function AppRouter(props: Props) {
     return unlisten;
   }, [hasNavigated, setHasNavigated]);
 
+  useEffect(() => {
+    const unlisten = history.listen(location => {
+      if (prevPath !== location.pathname && setPrevPath) {
+        setPrevPath(location.pathname);
+      }
+    });
+    return unlisten;
+  }, [prevPath, setPrevPath]);
+
   // Sync when no longer on a settings page, or when entering settings pages
   useEffect(() => {
     const unlisten = history.listen(location => {
+      console.log('location pathname', location.pathname);
+      console.log('prevpath pathname', prevPath);
       if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
-        console.log('settings sub');
         syncSubscribe();
+        console.log('settings sub');
         pushSettingsToPrefs();
       } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
         console.log('settings unsub');
@@ -160,16 +171,7 @@ function AppRouter(props: Props) {
       }
     });
     return unlisten;
-  }, [prevPath, pushSettingsToPrefs, checkSync, hasVerifiedEmail, syncEnabled, updatePreferences]);
-
-  useEffect(() => {
-    const unlisten = history.listen(location => {
-      if (prevPath !== location.pathname && setPrevPath) {
-        setPrevPath(location.pathname);
-      }
-    });
-    return unlisten;
-  }, [prevPath, setPrevPath]);
+  }, [prevPath, pushSettingsToPrefs, checkSync, syncSubscribe, hasVerifiedEmail, syncEnabled, updatePreferences]);
 
   useEffect(() => {
     if (uri) {

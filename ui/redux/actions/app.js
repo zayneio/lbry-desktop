@@ -50,7 +50,7 @@ import { doGetSyncDesktop } from 'redux/actions/syncwrapper';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
-import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
+import { doSignOutCleanup, deleteSavedPassword } from 'util/saved-passwords';
 import { doSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 import sha256 from 'crypto-js/sha256';
@@ -656,13 +656,6 @@ export function doHandleSyncComplete(error, hasNewData) {
 }
 
 export function doSyncWithPreferences() {
-  return dispatch => {
-    return getSavedPassword().then(password => {
-      const passwordArgument = password === null ? '' : password;
-
-      return dispatch(
-        doGetSyncDesktop(passwordArgument, (error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData)))
-      );
-    });
-  };
+  return dispatch =>
+    dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
 }
