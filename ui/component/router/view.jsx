@@ -152,6 +152,7 @@ function AppRouter(props: Props) {
   }, [prevPath, setPrevPath]);
 
   // Sync when no longer on a settings page, or when entering settings pages
+  // do this with a lock
   useEffect(() => {
     const unlisten = history.listen(location => {
       console.log('location -pathname', location.pathname);

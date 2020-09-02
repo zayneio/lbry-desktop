@@ -584,6 +584,9 @@ export function doToggle3PAnalytics(allowParam, doNotDispatch) {
 }
 
 export function doGetAndPopulatePreferences() {
+  // when sign in is ready
+  // if syncEnabled and syncAvailable
+  //  getSync, syncApply,
   const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
   return (dispatch, getState) => {

@@ -21,6 +21,7 @@ export const doGetSyncDesktop = (cb?: () => void) => (dispatch: Dispatch, getSta
   // const isSettingsPage = pathname.includes(PAGES.SETTINGS);
 
   return getSavedPassword().then(password => {
+    console.log('getSavedPassword', password);
     const passwordArgument = password === null ? '' : password;
 
     if (syncEnabled && !getSyncPending && !setSyncPending) {

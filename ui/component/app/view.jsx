@@ -197,12 +197,12 @@ function App(props: Props) {
       ReactModal.setAppElement(wrapperElement);
     }
 
-    fetchAccessToken();
+    // fetchAccessToken();
 
     // @if TARGET='app'
     fetchChannelListMine(); // This is fetched after a user is signed in on web
     // @endif
-  }, [appRef, fetchAccessToken, fetchChannelListMine]);
+  }, [appRef, fetchChannelListMine]);
 
   useEffect(() => {
     // $FlowFixMe

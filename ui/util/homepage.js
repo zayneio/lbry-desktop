@@ -248,25 +248,25 @@ export default function getHomePageRowData(
     },
   };
 
-  if (showPersonalizedChannels) rowData.push(RECENT_FROM_FOLLOWING);
-  if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
-  if (showPersonalizedTags && showIndividualTags) {
-    individualTagDataItems.forEach((item: RowDataItem) => {
-      rowData.push(item);
-    });
-  }
-
-  if (!authenticated) {
-    rowData.push(YOUTUBE_CREATOR_ROW);
-  }
-
-  rowData.push(TRENDING_CLASSICS);
+  // if (showPersonalizedChannels) rowData.push(RECENT_FROM_FOLLOWING);
+  // if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
+  // if (showPersonalizedTags && showIndividualTags) {
+  //   individualTagDataItems.forEach((item: RowDataItem) => {
+  //     rowData.push(item);
+  //   });
+  // }
+  //
+  // if (!authenticated) {
+  //   rowData.push(YOUTUBE_CREATOR_ROW);
+  // }
+  //
+  // rowData.push(TRENDING_CLASSICS);
   rowData.push(TOP_CONTENT_TODAY);
 
   //   rowData.push(TRENDING_ON_LBRY);
 
-  rowData.push(LATEST_FROM_LBRY);
-  rowData.push(LATEST_FROM_LBRYCAST);
+  // rowData.push(LATEST_FROM_LBRY);
+  // rowData.push(LATEST_FROM_LBRYCAST);
 
   if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
 
