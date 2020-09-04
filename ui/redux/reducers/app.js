@@ -111,14 +111,9 @@ reducers[ACTIONS.DAEMON_READY] = state =>
     daemonReady: true,
   });
 
-reducers[ACTIONS.LOCK_SYNC] = state =>
+reducers[ACTIONS.SET_SYNC_LOCK] = (state, action) =>
   Object.assign({}, state, {
-    syncLocked: true,
-  });
-
-reducers[ACTIONS.UNLOCK_SYNC] = state =>
-  Object.assign({}, state, {
-    syncLocked: false,
+    syncLocked: action.data,
   });
 
 reducers[ACTIONS.PASSWORD_SAVED] = (state, action) =>

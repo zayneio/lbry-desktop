@@ -66,6 +66,8 @@ type Props = {
   openModal: string => void,
   language?: string,
   syncEnabled: boolean,
+  enterSettings: () => void,
+  exitSettings: () => void,
 };
 
 type State = {
@@ -89,7 +91,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, enterSettings } = this.props;
 
     if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
@@ -99,6 +101,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
         }
       });
     }
+    enterSettings();
+  }
+
+  componentWillUnmount() {
+    const { exitSettings } = this.props;
+    exitSettings();
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {

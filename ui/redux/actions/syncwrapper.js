@@ -1,31 +1,34 @@
 // @flow
-import { doGetSync, selectGetSyncIsPending, selectSetSyncIsPending } from 'lbryinc';
+import { doGetSync, selectGetSyncIsPending, selectSetSyncIsPending, selectGetSyncErrorMessage } from 'lbryinc';
 import { selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting, doPushSettingsToPrefs } from 'redux/actions/settings';
 import { doToast } from 'redux/actions/notifications';
 import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
+import { selectSyncIsLocked } from '../selectors/app';
 
 let syncTimer = null;
 // const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
-const SYNC_INTERVAL = 5000; // 5 minutes
+const SYNC_INTERVAL = 30000; // 5 minutes
 
-export const doGetSyncDesktop = (cb?: () => void) => (dispatch: Dispatch, getState: GetState) => {
+export const doGetSyncDesktop = (cb?: () => void, password?: string) => (dispatch: Dispatch, getState: GetState) => {
+  dispatch({ type: 'DO_SYNC_DESK' }); // testing
+  console.log('DGSD');
   const state = getState();
   const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
   const getSyncPending = selectGetSyncIsPending(state);
   const setSyncPending = selectSetSyncIsPending(state);
   const walletIsEncrypted = selectWalletIsEncrypted(state);
-  // prevent syncing every time syncEnabled changes on settings page resetting it
-  // const isSettingsPage = pathname.includes(PAGES.SETTINGS);
+  const getSyncError = selectGetSyncErrorMessage(state);
+  const syncLocked = selectSyncIsLocked(state);
 
-  return getSavedPassword().then(password => {
-    console.log('getSavedPassword', password);
-    const passwordArgument = password === null ? '' : password;
+  return getSavedPassword().then(savedPassword => {
+    const passwordArgument = password || savedPassword === null ? '' : savedPassword;
 
-    if (syncEnabled && !getSyncPending && !setSyncPending) {
-      if (walletIsEncrypted && password === '') {
+    if (syncEnabled && !getSyncPending && !setSyncPending && !getSyncError && !syncLocked) {
+      // && notlocked?
+      if (walletIsEncrypted && savedPassword === '') {
         dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, false));
         dispatch(doPushSettingsToPrefs()); // update above
         dispatch(
@@ -35,37 +38,42 @@ export const doGetSyncDesktop = (cb?: () => void) => (dispatch: Dispatch, getSta
           })
         );
       } else {
+        // LOCK
         return dispatch(doGetSync(passwordArgument, cb));
       }
     }
   });
 };
 
+// Redo?
 export function doSyncSubscribe() {
-  console.log('DSS-');
+  // start or restart sync interval
   return (dispatch: Dispatch, getState: GetState) => {
+    dispatch({ type: 'DO_SUB' });
+    if (syncTimer) clearInterval(syncTimer);
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-    console.log('syncen', syncEnabled);
-    if (syncEnabled) {
-      dispatch(doGetSyncDesktop((error, hasNewData) => doHandleSyncComplete(error, hasNewData)));
+    const syncLocked = selectSyncIsLocked(state);
+    if (syncEnabled && !syncLocked) {
+      dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
       dispatch(doAnalyticsTagSync());
       console.log('sync subscription running-');
+      syncTimer = setInterval(() => {
+        const state = getState();
+        const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+        console.log('trying sync interval-');
+        if (syncEnabled) {
+          dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+          dispatch(doAnalyticsTagSync());
+        }
+      }, SYNC_INTERVAL);
     }
-    syncTimer = setInterval(() => {
-      const state = getState();
-      const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-      console.log('trying sync interval-');
-      if (syncEnabled) {
-        dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
-        dispatch(doAnalyticsTagSync());
-      }
-    }, SYNC_INTERVAL);
   };
 }
 
 export function doSyncUnsubscribe() {
   return (dispatch: Dispatch) => {
+    dispatch({ type: 'DO_UNSUB' });
     console.log('sync subscriptoin stopped-');
     if (syncTimer) {
       clearInterval(syncTimer);

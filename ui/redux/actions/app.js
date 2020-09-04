@@ -46,7 +46,7 @@ import {
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doGetSyncDesktop } from 'redux/actions/syncwrapper';
+import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -86,6 +86,13 @@ export function doUpdateDownloadProgress(percent) {
     data: {
       percent,
     },
+  };
+}
+
+export function doSetSyncLock(lock) {
+  return {
+    type: ACTIONS.SET_SYNC_LOCK,
+    data: lock,
   };
 }
 
@@ -647,7 +654,7 @@ export function doGetAndPopulatePreferences() {
 
 export function doHandleSyncComplete(error, hasNewData) {
   console.log('dohandlesync err', error);
-  console.log('dohandlesync hnd', hasNewData);
+  console.log('dohandlesync hasnewdata', hasNewData);
 
   return dispatch => {
     if (!error) {
@@ -662,6 +669,5 @@ export function doHandleSyncComplete(error, hasNewData) {
 }
 
 export function doSyncWithPreferences() {
-  return dispatch =>
-    dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+  return dispatch => dispatch(doSyncSubscribe());
 }

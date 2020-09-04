@@ -13,7 +13,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  getSync: (password, cb) => dispatch(doGetSyncDesktop(password, cb)),
+  getSync: (cb, password) => dispatch(doGetSyncDesktop(cb, password)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   handleSyncComplete: (error, hasDataChanged) => dispatch(doHandleSyncComplete(error, hasDataChanged)),
   signOut: () => dispatch(doSignOut()),

@@ -1,12 +1,9 @@
 import { connect } from 'react-redux';
-import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
 import Router from './view';
-import { normalizeURI, makeSelectTitleForUri, SETTINGS } from 'lbry-redux';
-import { doSetHasNavigated, doSyncWithPreferences, doGetAndPopulatePreferences } from 'redux/actions/app';
-import { doSyncSubscribe, doSyncUnsubscribe } from 'redux/actions/syncwrapper';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doPushSettingsToPrefs } from 'redux/actions/settings';
+import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';
+import { doSetHasNavigated } from 'redux/actions/app';
 const select = state => {
   const { pathname, hash } = state.router.location;
   const urlPath = pathname + hash;
@@ -31,18 +28,11 @@ const select = state => {
     isAuthenticated: selectUserVerifiedEmail(state),
     welcomeVersion: selectWelcomeVersion(state),
     hasNavigated: selectHasNavigated(state),
-    syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
-    user: selectUser(state),
   };
 };
 
 const perform = dispatch => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
-  syncSubscribe: () => dispatch(doSyncSubscribe()),
-  syncUnsubscribe: () => dispatch(doSyncUnsubscribe()),
-  pushSettingsToPrefs: () => dispatch(doPushSettingsToPrefs()),
-  checkSync: () => dispatch(doSyncWithPreferences()),
-  updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
 });
 
 export default connect(select, perform)(Router);

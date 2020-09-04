@@ -117,20 +117,11 @@ function AppRouter(props: Props) {
     welcomeVersion,
     hasNavigated,
     setHasNavigated,
-    pushSettingsToPrefs,
-    syncEnabled,
-    updatePreferences,
-    checkSync,
-    user,
-    syncSubscribe,
-    syncUnsubscribe,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
-  const [prevPath, setPrevPath] = React.useState(pathname);
-  const hasVerifiedEmail = user && user.has_verified_email;
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
@@ -141,38 +132,6 @@ function AppRouter(props: Props) {
     });
     return unlisten;
   }, [hasNavigated, setHasNavigated]);
-
-  useEffect(() => {
-    const unlisten = history.listen(location => {
-      if (prevPath !== location.pathname && setPrevPath) {
-        setPrevPath(location.pathname);
-      }
-    });
-    return unlisten;
-  }, [prevPath, setPrevPath]);
-
-  // Sync when no longer on a settings page, or when entering settings pages
-  // do this with a lock
-  useEffect(() => {
-    const unlisten = history.listen(location => {
-      console.log('location -pathname', location.pathname);
-      console.log('prevpath -pathname', prevPath);
-      if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
-        syncSubscribe();
-        console.log('settings -sub');
-        pushSettingsToPrefs();
-      } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
-        console.log('settings -unsub');
-        syncUnsubscribe();
-        if (syncEnabled && hasVerifiedEmail) {
-          checkSync();
-        } else {
-          updatePreferences();
-        }
-      }
-    });
-    return unlisten;
-  }, [prevPath, pushSettingsToPrefs, checkSync, syncSubscribe, hasVerifiedEmail, syncEnabled, updatePreferences]);
 
   useEffect(() => {
     if (uri) {

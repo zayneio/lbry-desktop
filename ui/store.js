@@ -10,9 +10,9 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
-import { doGetSyncDesktop } from 'redux/actions/syncwrapper';
+import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
+import { getAuthToken } from 'util/saved-passwords';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { generateInitialUrl } from 'util/url';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
@@ -152,14 +152,12 @@ const sharedStateFilters = {
 };
 
 const sharedStateCb = ({ dispatch, getState }) => {
-  const state = getState();
-  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-  const emailVerified = selectUserVerifiedEmail(state);
-  if (syncEnabled && emailVerified) {
-    getSavedPassword().then(savedPassword => {
-      dispatch(doGetSyncDesktop(savedPassword));
-    });
-  }
+  // const state = getState();
+  // const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+  // const emailVerified = selectUserVerifiedEmail(state);
+  // if (syncEnabled && emailVerified) {
+  //   console.log('store subscribe');
+  dispatch(doSyncSubscribe());
 };
 
 const populateAuthTokenHeader = () => {

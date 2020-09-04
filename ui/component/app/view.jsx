@@ -71,12 +71,15 @@ type Props = {
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
+  syncEnabled: boolean,
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
   analyticsTagSync: () => void,
   isAuthenticated: boolean,
   socketConnect: () => void,
   syncSubscribe: () => void,
+  syncEnabled: boolean,
+  signInSyncPref: boolean,
 };
 
 function App(props: Props) {
@@ -101,6 +104,7 @@ function App(props: Props) {
     setReferrer,
     isAuthenticated,
     syncSubscribe,
+    signInSyncPref,
   } = props;
 
   const appRef = useRef();
@@ -234,32 +238,39 @@ function App(props: Props) {
   useEffect(() => {
     if (updatePreferences && readyForPrefs) {
       updatePreferences().then(() => {
-        updateSyncPref(); // copy
+        updateSyncPref(); // only set when false so as to not overwrite timestamp?
         setReadyForSync(true);
       });
     }
-  }, [hasSignedIn, updatePreferences, updateSyncPref, setReadyForSync, readyForPrefs]);
+  }, [updatePreferences, setReadyForSync, readyForPrefs, hasVerifiedEmail, updateSyncPref]);
   // @endif
 
+  // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
-    if (readyForSync) {
-      // we need this to check syncEnabled.
+    console.log('syncEffect');
+    //
+    if (readyForSync && hasVerifiedEmail) {
+      // Copy sync checkbox to settings and push to preferences
+      // before sync if false, after sync if true so as not to change timestamp.
+      if (signInSyncPref === false) {
+        updateSyncPref();
+      }
       syncSubscribe();
+      if (signInSyncPref === true) {
+        updateSyncPref();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readyForSync]);
+  }, [readyForSync, hasVerifiedEmail, signInSyncPref, updateSyncPref]);
 
-  // Currently we know someone is logging in or not when we get their user object {}
+  // We know someone is logging in or not when we get their user object {}
   // We'll use this to determine when it's time to pull preferences
   // This will no longer work if desktop users no longer get a user object from lbryinc
   useEffect(() => {
     if (user) {
-      // user == string is actually a bug - fix it later
-      if (typeof user === 'string' || hasVerifiedEmail) {
-        setReadyForPrefs(true);
-      }
+      setReadyForPrefs(true);
     }
-  }, [user, setReadyForPrefs, hasVerifiedEmail]);
+  }, [user, setReadyForPrefs]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
