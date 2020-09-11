@@ -80,12 +80,12 @@ const defaultState: AppState = {
   syncLocked: false,
 };
 
-// @@router comes from react-router
-// This action is dispatched any time a user navigates forward or back
 try {
-  defaultState.volume = Number(sessionStorage.getItem('volume'));
+  defaultState.volume = Number(sessionStorage.getItem('volume')) || 1;
 } catch (e) {}
 
+// @@router comes from react-router
+// This action is dispatched any time a user navigates forward or back
 reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
   const { currentScroll } = state;
   const scrollHistory = (state.scrollHistory && state.scrollHistory.slice()) || [];
