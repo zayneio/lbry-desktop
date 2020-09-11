@@ -112,7 +112,7 @@ function App(props: Props) {
   const [hasSignedIn, setHasSignedIn] = useState(false);
   const [readyForSync, setReadyForSync] = useState(false);
   const [readyForPrefs, setReadyForPrefs] = useState(false);
-  const hasVerifiedEmail = user && user.has_verified_email;
+  const hasVerifiedEmail = user && Boolean(user.has_verified_email);
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);

@@ -9,6 +9,7 @@ import * as MODALS from 'constants/modal_types';
 import { DOMAIN } from 'config';
 import {
   Lbry,
+  SETTINGS,
   doBalanceSubscribe,
   doFetchFileInfos,
   makeSelectClaimForUri,
@@ -25,11 +26,13 @@ import {
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
 import Native from 'native';
 import {
+  doSetClientSetting,
   doFetchDaemonSettings,
   doSetAutoLaunch,
   doSetDaemonSetting,
   doFindFFmpeg,
   doGetDaemonStatus,
+  doSetSyncPref,
 } from 'redux/actions/settings';
 import {
   selectIsUpgradeSkipped,
@@ -43,7 +46,7 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
-import { selectDaemonSettings } from 'redux/selectors/settings';
+import { selectDaemonSettings, selectSyncSigninPref } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doSyncSubscribe } from 'redux/actions/syncwrapper';
@@ -607,8 +610,16 @@ export function doGetAndPopulatePreferences() {
     function successCb(savedPreferences) {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
+      const signinSyncPref = selectSyncSigninPref(successState);
 
-      if (savedPreferences !== null) {
+      if (savedPreferences === null) {
+        if (signinSyncPref !== undefined) {
+          dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, signinSyncPref));
+          // apply this here since USER_STATE_POPULATE
+          // does not run when prefs are null (clean wallet)
+          dispatch(doSetSyncPref(undefined));
+        }
+      } else {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
 
