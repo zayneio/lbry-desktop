@@ -8,11 +8,11 @@ import { doFetchChannelListMine, SETTINGS } from 'lbry-redux';
 import {
   makeSelectClientSetting,
   selectLoadedLanguages,
-  selectSyncSigninPref,
   selectThemePath,
+  selectWalletSyncPreference,
 } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { doSetLanguage, doUpdateSyncPrefIfFalse } from 'redux/actions/settings';
+import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import {
   doDownloadUpgradeRequested,
@@ -27,7 +27,7 @@ const select = state => ({
   accessToken: selectAccessToken(state),
   theme: selectThemePath(state),
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  syncEnabled: selectWalletSyncPreference(state),
   languages: selectLoadedLanguages(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
@@ -35,7 +35,6 @@ const select = state => ({
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
-  signInSyncPref: selectSyncSigninPref(state),
 });
 
 const perform = dispatch => ({
@@ -46,7 +45,7 @@ const perform = dispatch => ({
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
-  pushPrefsIfSyncFalse: () => dispatch(doUpdateSyncPrefIfFalse()),
+  getWalletSyncPref: () => dispatch(doGetWalletSyncPreference()),
   syncSubscribe: () => dispatch(doSyncSubscribe()),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });

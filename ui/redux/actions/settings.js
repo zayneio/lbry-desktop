@@ -4,7 +4,7 @@ import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectWalletSyncPreference } from 'redux/selectors/settings';
 import { doGetSyncDesktop, doSyncUnsubscribe } from 'redux/actions/syncwrapper';
 import { doGetAndPopulatePreferences, doSetSyncLock } from 'redux/actions/app';
 
@@ -131,31 +131,9 @@ export function doSetClientSetting(key, value, pushPrefs) {
         value,
       },
     });
-
     if (pushPrefs) {
       dispatch(doPushSettingsToPrefs());
     }
-  };
-}
-
-export function doUpdateSyncPrefIfFalse() {
-  // This is only called after manual signin to update the wallet
-  // that the sync preference is false
-  return (dispatch, getState) => {
-    const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-    if (syncEnabled === false) {
-      dispatch(doPushSettingsToPrefs());
-    }
-  };
-}
-
-export function doSetSyncPref(isEnabled) {
-  return dispatch => {
-    dispatch({
-      type: LOCAL_ACTIONS.SYNC_PREFERENCE_CHANGED,
-      data: isEnabled,
-    });
   };
 }
 
@@ -195,6 +173,34 @@ export function doSetDarkTime(value, options) {
   };
 }
 
+export function doGetWalletSyncPreference() {
+  const SYNC_KEY = 'enable-sync';
+  return dispatch => {
+    return Lbry.preference_get({ key: SYNC_KEY }).then(result => {
+      const enabled = result && result[SYNC_KEY];
+      dispatch({
+        type: LOCAL_ACTIONS.WALLET_SYNC_PREFERENCE_RECEIVED,
+        data: enabled,
+      });
+      return enabled;
+    });
+  };
+}
+
+export function doSetWalletSyncPreference(pref) {
+  const SYNC_KEY = 'enable-sync';
+  return dispatch => {
+    return Lbry.preference_set({ key: SYNC_KEY, value: pref }).then(result => {
+      const enabled = result[SYNC_KEY];
+      dispatch({
+        type: LOCAL_ACTIONS.WALLET_SYNC_PREFERENCE_RECEIVED,
+        data: enabled,
+      });
+      return enabled;
+    });
+  };
+}
+
 export function doPushSettingsToPrefs() {
   return dispatch => {
     return new Promise((resolve, reject) => {
@@ -209,7 +215,7 @@ export function doPushSettingsToPrefs() {
 export function doEnterSettingsPage() {
   return async (dispatch, getState) => {
     const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const syncEnabled = selectWalletSyncPreference(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
     dispatch(doSyncUnsubscribe());
     if (syncEnabled && hasVerifiedEmail) {

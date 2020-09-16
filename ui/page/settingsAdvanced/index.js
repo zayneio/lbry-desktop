@@ -14,6 +14,7 @@ import {
   selectDaemonSettings,
   selectFfmpegStatus,
   selectFindingFFmpeg,
+  selectWalletSyncPreference,
 } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
@@ -30,7 +31,7 @@ const select = state => ({
   ffmpegStatus: selectFfmpegStatus(state),
   findingFFmpeg: selectFindingFFmpeg(state),
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  syncEnabled: selectWalletSyncPreference(state),
 });
 
 const perform = dispatch => ({
