@@ -21,26 +21,14 @@ export const selectSubscriptions = createSelector(
 );
 
 // Fetching list of users subscriptions
-export const selectIsFetchingSubscriptions = createSelector(
-  selectState,
-  state => state.loading
-);
+export const selectIsFetchingSubscriptions = createSelector(selectState, state => state.loading);
 
 // The current view mode on the subscriptions page
-export const selectViewMode = createSelector(
-  selectState,
-  state => state.viewMode
-);
+export const selectViewMode = createSelector(selectState, state => state.viewMode);
 
 // Suggested subscriptions from internal apis
-export const selectSuggested = createSelector(
-  selectState,
-  state => state.suggested
-);
-export const selectIsFetchingSuggested = createSelector(
-  selectState,
-  state => state.loadingSuggested
-);
+export const selectSuggested = createSelector(selectState, state => state.suggested);
+export const selectIsFetchingSuggested = createSelector(selectState, state => state.loadingSuggested);
 export const selectSuggestedChannels = createSelector(
   selectSubscriptions,
   selectSuggested,
@@ -93,14 +81,8 @@ export const selectSuggestedChannels = createSelector(
   }
 );
 
-export const selectFirstRunCompleted = createSelector(
-  selectState,
-  state => state.firstRunCompleted
-);
-export const selectshowSuggestedSubs = createSelector(
-  selectState,
-  state => state.showSuggestedSubs
-);
+export const selectFirstRunCompleted = createSelector(selectState, state => state.firstRunCompleted);
+export const selectshowSuggestedSubs = createSelector(selectState, state => state.showSuggestedSubs);
 
 // Fetching any claims that are a part of a users subscriptions
 export const selectSubscriptionsBeingFetched = createSelector(
@@ -119,29 +101,23 @@ export const selectSubscriptionsBeingFetched = createSelector(
   }
 );
 
-export const selectUnreadByChannel = createSelector(
-  selectState,
-  state => state.unread
-);
+export const selectUnreadByChannel = createSelector(selectState, state => state.unread);
 
 // Returns the current total of unread subscriptions
-export const selectUnreadAmount = createSelector(
-  selectUnreadByChannel,
-  unreadByChannel => {
-    const unreadChannels = Object.keys(unreadByChannel);
-    let badges = 0;
+export const selectUnreadAmount = createSelector(selectUnreadByChannel, unreadByChannel => {
+  const unreadChannels = Object.keys(unreadByChannel);
+  let badges = 0;
 
-    if (!unreadChannels.length) {
-      return badges;
-    }
-
-    unreadChannels.forEach(channel => {
-      badges += unreadByChannel[channel].uris.length;
-    });
-
+  if (!unreadChannels.length) {
     return badges;
   }
-);
+
+  unreadChannels.forEach(channel => {
+    badges += unreadByChannel[channel].uris.length;
+  });
+
+  return badges;
+});
 
 // Returns the uris with channels as an array with the channel with the newest content first
 // If you just want the `unread` state, use selectUnread
@@ -202,11 +178,7 @@ export const selectUnreadSubscriptions = createSelector(
 );
 
 // Returns all unread subscriptions for a uri passed in
-export const makeSelectUnreadByChannel = uri =>
-  createSelector(
-    selectUnreadByChannel,
-    unread => unread[uri]
-  );
+export const makeSelectUnreadByChannel = uri => createSelector(selectUnreadByChannel, unread => unread[uri]);
 
 // Returns the first page of claims for every channel a user is subscribed to
 export const selectSubscriptionClaims = createSelector(
@@ -258,10 +230,7 @@ export const selectSubscriptionClaims = createSelector(
 // Returns true if a user is subscribed to the channel associated with the uri passed in
 // Accepts content or channel uris
 export const makeSelectChannelInSubscriptions = uri =>
-  createSelector(
-    selectSubscriptions,
-    subscriptions => subscriptions.some(sub => sub.uri === uri)
-  );
+  createSelector(selectSubscriptions, subscriptions => subscriptions.some(sub => sub.uri === uri));
 
 export const makeSelectIsSubscribed = uri =>
   createSelector(
@@ -282,6 +251,31 @@ export const makeSelectIsSubscribed = uri =>
       if (isChannel && claim) {
         const uri = claim.permanent_url;
         return subscriptions.some(sub => sub.uri === uri);
+      }
+
+      return false;
+    }
+  );
+
+export const makeSelectIsNotificationsEnabled = uri =>
+  createSelector(
+    selectSubscriptions,
+    makeSelectChannelForClaimUri(uri, true),
+    makeSelectClaimForUri(uri),
+    (subscriptions, channelUri, claim) => {
+      if (channelUri) {
+        return subscriptions.some(sub => sub.uri === channelUri);
+      }
+
+      // If we couldn't get a channel uri from the claim uri, the uri passed in might be a channel already
+      let isChannel;
+      try {
+        ({ isChannel } = parseURI(uri));
+      } catch (e) {}
+
+      if (isChannel && claim) {
+        const uri = claim.permanent_url;
+        return subscriptions.some(sub => sub.uri === uri && sub.is_notifications_disabled);
       }
 
       return false;

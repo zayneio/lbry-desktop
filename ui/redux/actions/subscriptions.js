@@ -170,6 +170,21 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: D
   }
 };
 
+export const doToggleSubscriptionNotifications = (subscription: Subscription) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+
+  const { channelClaimId } = parseURI(subscription.uri);
+  // They are sharing data, we can store their subscriptions in our internal database
+  Lbryio.call('subscription', 'new', {
+    channel_name: subscription.channelName,
+    claim_id: channelClaimId,
+    is_notifications_disabled: !subscription.is_notifications_disabled,
+  });
+};
+
 export const doFetchRecommendedSubscriptions = () => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,

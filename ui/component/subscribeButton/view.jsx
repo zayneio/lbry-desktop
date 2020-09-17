@@ -30,8 +30,9 @@ export default function SubscribeButton(props: Props) {
     showSnackBarOnSubscribe,
     doToast,
     shrinkOnMobile = false,
+    doToggleSubscriptionNotifications,
+    hasNotificationsEnabled,
   } = props;
-
   const buttonRef = useRef();
   const isMobile = useIsMobile();
   let isHovering = useHover(buttonRef);
@@ -48,27 +49,43 @@ export default function SubscribeButton(props: Props) {
   const titlePrefix = isSubscribed ? __('Unfollow this channel') : __('Follow this channel');
 
   return permanentUrl ? (
-    <Button
-      ref={buttonRef}
-      iconColor="red"
-      largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
-      icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
-      button={'alt'}
-      requiresAuth={IS_WEB}
-      label={label}
-      title={titlePrefix}
-      onClick={e => {
-        e.stopPropagation();
+    <div className="button-group">
+      <Button
+        ref={buttonRef}
+        iconColor="red"
+        largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
+        icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
+        button={'alt'}
+        requiresAuth={IS_WEB}
+        label={label}
+        title={titlePrefix}
+        onClick={e => {
+          e.stopPropagation();
 
-        subscriptionHandler({
-          channelName: claimName,
-          uri: permanentUrl,
-        });
+          subscriptionHandler({
+            channelName: claimName,
+            uri: permanentUrl,
+          });
 
-        if (showSnackBarOnSubscribe) {
-          doToast({ message: `${__('Now following ')} ${claimName}!` });
-        }
-      }}
-    />
+          if (showSnackBarOnSubscribe) {
+            doToast({ message: `${__('Now following ')} ${claimName}!` });
+          }
+        }}
+      />
+
+      {isSubscribed && (
+        <Button
+          button="alt"
+          requiresAuth={IS_WEB}
+          icon={hasNotificationsEnabled ? ICONS.BELL_ON : ICONS.BELL_OFF}
+          onClick={doToggleSubscriptionNotifications}
+          title={
+            val
+              ? __('Get notified about new uploads from this creator.')
+              : __('You will not be notified about new uploads from this creator.')
+          }
+        />
+      )}
+    </div>
   ) : null;
 }

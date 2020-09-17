@@ -155,6 +155,7 @@ export default handleActions(
           return {
             uri,
             channelName: `@${channelName}`,
+            is_notifications_disabled,
           };
         });
         newSubscriptions = parsedSubscriptions;
