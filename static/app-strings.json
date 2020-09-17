@@ -1285,5 +1285,12 @@
   "%comment_count% comments - %comment_count_change% this week": "%comment_count% comments - %comment_count_change% this week",
   "Invite": "Invite",
   "Remove File": "Remove File",
+  "You are currently following %followingCount% tag": "You are currently following %followingCount% tag",
+  "DO a thing": "DO a thing",
+  "DO IT": "DO IT",
+  "Not Yet": "Not Yet",
+  "I understand": "I understand",
+  "Enabling Sync": "Enabling Sync",
+  "Enable Sync": "Enable Sync",
   "--end--": "--end--"
 }

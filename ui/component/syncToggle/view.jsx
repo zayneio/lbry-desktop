@@ -1,9 +1,10 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
-import { FormField } from 'component/common/form';
 import { withRouter } from 'react-router';
+import * as ICONS from '../../constants/icons';
 
 type Props = {
   setSyncEnabled: boolean => void,
@@ -13,22 +14,18 @@ type Props = {
   location: UrlLocation,
   getSyncError: ?string,
   disabled: boolean,
+  openModal: id => void,
 };
 
 function SyncToggle(props: Props) {
   const {
-    setSyncEnabled,
-    syncEnabled,
     verifiedEmail,
     getSyncError,
     history,
     location: { pathname },
-    disabled = false,
+    openModal,
+    syncEnabled,
   } = props;
-
-  function handleChange() {
-    setSyncEnabled(!syncEnabled);
-  }
 
   if (getSyncError) {
     history.push(`/$/${PAGES.AUTH}?redirect=${pathname}&immediate=true`);
@@ -43,13 +40,11 @@ function SyncToggle(props: Props) {
           <p className="help">{__('An email address is required to sync your account.')}</p>
         </div>
       ) : (
-        <FormField
-          type="checkbox"
-          name="sync_toggle"
-          label={__('Sync your balance and preferences across devices.')}
-          checked={syncEnabled}
-          onChange={handleChange}
-          disabled={disabled}
+        <Button
+          button="secondary"
+          label={__('Manage')}
+          icon={ICONS.SETTINGS}
+          onClick={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
         />
       )}
     </div>
