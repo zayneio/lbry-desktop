@@ -12,6 +12,7 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import SyncToggle from './view';
+import { doGetAndPopulatePreferences } from 'redux/actions/app';
 
 const select = state => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
@@ -27,6 +28,7 @@ const perform = dispatch => ({
   setSyncEnabled: value => dispatch(doSetWalletSyncPreference(value)),
   checkSync: () => dispatch(doCheckSync()),
   getSync: (pw, cb) => dispatch(doGetSync(pw, cb)),
+  updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
 });
 
 export default connect(select, perform)(SyncToggle);

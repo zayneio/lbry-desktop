@@ -16,6 +16,7 @@ type Props = {
   getSync: (pw: string, cb: () => void) => void,
   checkSync: () => void,
   closeModal: () => void,
+  updatePreferences: () => void,
   mode: string,
 };
 
@@ -32,7 +33,16 @@ const SHARED_KEY = 'shared';
 const LOCAL_KEY = 'local';
 
 function SyncEnableFlow(props: Props) {
-  const { setSyncEnabled, getSyncError, getSyncPending, getSync, checkSync, mode, closeModal } = props;
+  const {
+    setSyncEnabled,
+    getSyncError,
+    getSyncPending,
+    getSync,
+    checkSync,
+    mode,
+    closeModal,
+    updatePreferences,
+  } = props;
 
   const [step, setStep] = React.useState(INITIAL);
   const [prefDict, setPrefDict]: [any, (any) => void] = React.useState();
@@ -58,6 +68,7 @@ function SyncEnableFlow(props: Props) {
       await Lbry.preference_set({ key: mode === ENABLE_MODE ? SHARED_KEY : LOCAL_KEY, value: finalPrefs });
     }
     await setSyncEnabled(mode === ENABLE_MODE);
+    await updatePreferences();
     closeModal();
   };
 
