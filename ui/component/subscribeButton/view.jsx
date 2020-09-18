@@ -77,10 +77,10 @@ export default function SubscribeButton(props: Props) {
         <Button
           button="alt"
           requiresAuth={IS_WEB}
-          icon={hasNotificationsEnabled ? ICONS.BELL_ON : ICONS.BELL_OFF}
+          icon={'hasNotificationsEnabled' ? ICONS.BELL_ON : ICONS.BELL_OFF}
           onClick={doToggleSubscriptionNotifications}
           title={
-            val
+            hasNotificationsEnabled
               ? __('Get notified about new uploads from this creator.')
               : __('You will not be notified about new uploads from this creator.')
           }
