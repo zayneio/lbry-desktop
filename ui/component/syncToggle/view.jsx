@@ -4,7 +4,7 @@ import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
 import { withRouter } from 'react-router';
-import * as ICONS from '../../constants/icons';
+import { FormField } from 'component/common/form';
 
 type Props = {
   setSyncEnabled: boolean => void,
@@ -14,7 +14,7 @@ type Props = {
   location: UrlLocation,
   getSyncError: ?string,
   disabled: boolean,
-  openModal: id => void,
+  openModal: (string, any) => void,
 };
 
 function SyncToggle(props: Props) {
@@ -25,6 +25,7 @@ function SyncToggle(props: Props) {
     location: { pathname },
     openModal,
     syncEnabled,
+    disabled,
   } = props;
 
   if (getSyncError) {
@@ -40,11 +41,13 @@ function SyncToggle(props: Props) {
           <p className="help">{__('An email address is required to sync your account.')}</p>
         </div>
       ) : (
-        <Button
-          button="secondary"
-          label={__('Manage')}
-          icon={ICONS.SETTINGS}
-          onClick={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
+        <FormField
+          type="checkbox"
+          name="sync_toggle"
+          label={__('Sync your balance and preferences across devices.')}
+          checked={syncEnabled}
+          onChange={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
+          disabled={disabled}
         />
       )}
     </div>

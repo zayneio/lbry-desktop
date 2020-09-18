@@ -1,17 +1,18 @@
 // @flow
 import { doGetSync, selectGetSyncIsPending, selectSetSyncIsPending } from 'lbryinc';
-import { selectWalletSyncPreference } from 'redux/selectors/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
 import { selectSyncIsLocked } from 'redux/selectors/app';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { SETTINGS } from 'lbry-redux';
 
 let syncTimer = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 export const doGetSyncDesktop = (cb?: () => void, password?: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
-  const syncEnabled = selectWalletSyncPreference(state);
+  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
   const getSyncPending = selectGetSyncIsPending(state);
   const setSyncPending = selectSetSyncIsPending(state);
   const syncLocked = selectSyncIsLocked(state);
@@ -30,14 +31,14 @@ export function doSyncSubscribe() {
     if (syncTimer) clearInterval(syncTimer);
     const state = getState();
     const hasVerifiedEmail = selectUserVerifiedEmail(state);
-    const syncEnabled = selectWalletSyncPreference(state);
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const syncLocked = selectSyncIsLocked(state);
     if (hasVerifiedEmail && syncEnabled && !syncLocked) {
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
       dispatch(doAnalyticsTagSync());
       syncTimer = setInterval(() => {
         const state = getState();
-        const syncEnabled = selectWalletSyncPreference(state);
+        const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
         if (syncEnabled) {
           dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
           dispatch(doAnalyticsTagSync());

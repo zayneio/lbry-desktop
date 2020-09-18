@@ -11,8 +11,14 @@ import {
   selectUser,
   selectAccessToken,
 } from 'redux/selectors/user';
-import { selectMyChannelClaims, selectBalance, selectFetchingMyChannels, selectCreatingChannel } from 'lbry-redux';
-import { selectWalletSyncPreference } from 'redux/selectors/settings';
+import {
+  selectMyChannelClaims,
+  selectBalance,
+  selectFetchingMyChannels,
+  selectCreatingChannel,
+  SETTINGS,
+} from 'lbry-redux';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import UserSignIn from './view';
 
 const select = state => ({
@@ -28,7 +34,7 @@ const select = state => ({
   fetchingChannels: selectFetchingMyChannels(state),
   youtubeChannels: selectYoutubeChannels(state),
   userFetchPending: selectUserIsPending(state),
-  syncEnabled: selectWalletSyncPreference(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncingWallet: selectGetSyncIsPending(state),
   getSyncError: selectGetSyncErrorMessage(state),
   hasSynced: Boolean(selectSyncHash(state)),

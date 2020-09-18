@@ -9,12 +9,12 @@ import {
   doCheckSync,
   doGetSync,
 } from 'lbryinc';
-import { makeSelectClientSetting, selectWalletSyncPreference } from 'redux/selectors/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import SyncToggle from './view';
 
 const select = state => ({
-  syncEnabled: selectWalletSyncPreference(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   hasSyncedWallet: selectHasSyncedWallet(state),
   hasSyncChanged: selectHashChanged(state),
   verifiedEmail: selectUserVerifiedEmail(state),

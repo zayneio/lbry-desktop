@@ -1292,5 +1292,10 @@
   "I understand": "I understand",
   "Enabling Sync": "Enabling Sync",
   "Enable Sync": "Enable Sync",
+  "Bring my stuff!": "Bring my stuff!",
+  "Disable Sync": "Disable Sync",
+  "Enable": "Enable",
+  "Continuing will import the profile in your cloud wallet into your local wallet.": "Continuing will import the profile in your cloud wallet into your local wallet.",
+  "": "",
   "--end--": "--end--"
 }

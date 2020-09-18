@@ -6,15 +6,15 @@ import {
   selectEmailAlreadyExists,
   selectUser,
 } from 'redux/selectors/user';
-import { DAEMON_SETTINGS } from 'lbry-redux';
+import { DAEMON_SETTINGS, SETTINGS } from 'lbry-redux';
 import { doSetWalletSyncPreference, doSetDaemonSetting } from 'redux/actions/settings';
-import { selectDaemonSettings, selectWalletSyncPreference } from 'redux/selectors/settings';
+import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import UserEmailNew from './view';
 
 const select = state => ({
   isPending: selectEmailNewIsPending(state),
   errorMessage: selectEmailNewErrorMessage(state),
-  syncEnabled: selectWalletSyncPreference(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   daemonSettings: selectDaemonSettings(state),
   emailExists: selectEmailAlreadyExists(state),
   user: selectUser(state),

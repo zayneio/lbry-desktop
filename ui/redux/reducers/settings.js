@@ -24,7 +24,6 @@ const defaultState = {
   findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
-  syncEnabledInWallet: IS_WEB,
   sharedPreferences: {},
   daemonSettings: {},
   daemonStatus: { ffmpeg_status: {} },
@@ -167,10 +166,6 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
 
 reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
   return Object.assign({}, state, { customWalletServers: action.data });
-};
-
-reducers[ACTIONS.WALLET_SYNC_PREFERENCE_RECEIVED] = (state, action) => {
-  return Object.assign({}, state, { syncEnabledInWallet: action.data });
 };
 
 export default function reducer(state = defaultState, action) {

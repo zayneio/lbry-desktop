@@ -11,8 +11,6 @@ export const selectFfmpegStatus = createSelector(selectDaemonStatus, status => s
 
 export const selectFindingFFmpeg = createSelector(selectState, state => state.findingFFmpeg || false);
 
-export const selectWalletSyncPreference = createSelector(selectState, state => state.syncEnabledInWallet);
-
 export const selectClientSettings = createSelector(selectState, state => state.clientSettings || {});
 
 export const selectLoadedLanguages = createSelector(selectState, state => state.loadedLanguages || {});
