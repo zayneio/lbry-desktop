@@ -66,7 +66,7 @@ let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
 sdkAPIHost = LBRY_WEB_API;
 // @endif
 
-export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
+export const SDK_API_PATH = `${sdkAPIHost}/api`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
 
 Lbry.setDaemonConnectionString(proxyURL);
