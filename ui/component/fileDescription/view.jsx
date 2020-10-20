@@ -11,7 +11,6 @@ type Props = {
   metadata: StreamMetadata,
   user: ?any,
   tags: any,
-  simple: boolean,
 };
 
 function FileDescription(props: Props) {
