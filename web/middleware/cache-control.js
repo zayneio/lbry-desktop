@@ -25,9 +25,7 @@ async function redirectMiddleware(ctx, next) {
 
   if (STATIC_ASSET_PATHS.includes(url)) {
     ctx.set('Cache-Control', `public, max-age=${SIX_MONTHS_IN_SECONDS}`);
-  }
-
-  return next();
+  } else if (url.includes('.js')) return next();
 }
 
 module.exports = redirectMiddleware;

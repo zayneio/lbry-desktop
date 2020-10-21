@@ -307,5 +307,8 @@ $metadata-z-index: 1;
   margin-left: 2px;
   margin-right: 5px;
   padding: 0;
-  margin-bottom: -3px;
+  display: inline-block;
+  margin-left: 5px;
+  color: var(--color-gray-4);
+  //   margin-bottom: -3px;
 }

@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Icon from 'component/common/icon';
 import LbcSymbol from 'component/common/lbc-symbol';
+import { formatCredits, formatFullPrice } from 'lbry-redux';
 
 type Props = {
   claim: ?ChannelClaim,
@@ -17,9 +18,11 @@ function ChannelStakedIndicator(props: Props) {
   }
 
   const amount = parseFloat(claim.amount) + parseFloat(claim.meta.support_amount);
-  if (amount < 10) {
-    return null;
-  }
+  //   if (amount < 10) {
+  //     return null;
+  //   }
+
+  return <div className="channel__staked-indicator">{formatCredits(amount, 1, true)}</div>;
 
   if (amount > 9 && amount < 99) {
     return <Icon icon={ICONS.STAKE_INDICATOR_LEVEL_1} size={14} className="channel__staked-indicator" />;
