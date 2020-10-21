@@ -135,8 +135,8 @@ function FilePage(props: Props) {
     <Page className="file-page" filePage>
       <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
         {renderFilePageLayout()}
-        <FileValues uri={uri} />
-        <FileDetails uri={uri} />
+        {/* <FileValues uri={uri} />
+        <FileDetails uri={uri} /> */}
 
         <CommentsList uri={uri} linkedComment={linkedComment} />
       </div>
