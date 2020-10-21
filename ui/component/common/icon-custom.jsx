@@ -1019,7 +1019,7 @@ export const icons = {
       />
     </svg>
   ),
-  [ICONS.PLANT]: (props: CustomProps) => (
+  [ICONS.STAKE_INDICATOR_LEVEL_1]: (props: CustomProps) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -1044,7 +1044,7 @@ export const icons = {
       />
     </svg>
   ),
-  [ICONS.PLANT]: (props: CustomProps) => (
+  [ICONS.STAKE_INDICATOR_LEVEL_2]: (props: CustomProps) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -1061,6 +1061,56 @@ export const icons = {
       <path
         className="icon__egg-cracked"
         d="M7.49999 8.5L6.49999 8C3.61013 18.8714 8 22.5 14 22.5C20.5 22 23.3742 16.6544 20.5 8.5L19.5 9L18 8L16.5 9L15 8L14 9L12.5 8L10.5 9L8.99999 8L7.49999 8.5Z"
+      />
+    </svg>
+  ),
+  [ICONS.STAKE_INDICATOR_LEVEL_3]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-2 0 24 24"
+      width={props.size || '18'}
+      height={props.size || '18'}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path
+        d="M23 22H2.56334C1.28992 13.3753 2.01098 1.9624 6.42972 3.0756C10.8485 4.1888 9.19144 8.085 15.2672 8.6416C21.343 9.1982 16.9242 11.9812 18.5813 15.8774C20.2383 19.7736 23 22 23 22Z"
+        fill="#EA0854"
+        stroke="#EA0854"
+        strokeLinejoin="round"
+      />
+      <circle cx="5" cy="11" r="2" fill="white" strokeWidth="0" />
+      <circle cx="10" cy="10" r="2" fill="white" strokeWidth="0" />
+      <path
+        d="M4.87628 16.0059C8.6488 17.4755 10.3317 16.8469 12.7267 13.6757"
+        stroke="white"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  ),
+  [ICONS.STAKE_INDICATOR_LEVEL_4]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-2 0 24 24"
+      width={props.size || '18'}
+      height={props.size || '18'}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path
+        d="M11.3835 19.4498C9.62304 16.7736 1.72406 13.591 2.5263 11.8918C3.32853 10.1926 6.94106 9.95414 9.75608 5.1264C12.5711 0.298655 14.0941 1.5567 14.8903 6.36641C15.6865 11.1761 17.9059 9.8408 19.6812 12.1548C21.4565 14.4689 18.0034 13.9398 16.5143 16.1514C15.0251 18.363 13.1439 22.1259 11.3835 19.4498Z"
+        fill="#EA0854"
+        stroke="#EA0854"
+        strokeLinejoin="round"
       />
     </svg>
   ),

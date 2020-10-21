@@ -20,6 +20,7 @@ import CommentReactions from 'component/commentReactions';
 import CommentsReplies from 'component/commentsReplies';
 import { useHistory } from 'react-router';
 import CommentCreate from 'component/commentCreate';
+import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   uri: string,
@@ -202,11 +203,12 @@ function Comment(props: Props) {
               {!author ? (
                 <span className="comment__author">{__('Anonymous')}</span>
               ) : (
-                <Button
-                  className="button--uri-indicator truncated-text comment__author"
-                  navigate={authorUri}
-                  label={author}
-                />
+                // <Button
+                //   className="button--uri-indicator truncated-text comment__author"
+                //   navigate={authorUri}
+                //   label={author}
+                // />
+                <UriIndicator link uri={authorUri} />
               )}
               <Button
                 className="comment__time"
