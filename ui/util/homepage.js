@@ -149,6 +149,7 @@ export const PRIMARY_CONTENT_CHANNEL_IDS = [
   '16fb96ca5b1713a4cc787e9e2542da724a45c854',
   'c1296488bc1aa7a8c8890509fd231267b3cf9e16',
   '0b7925083d4c382cb441f5f44ad626f7627bc198',
+  'af0f5d9e055d07c8308da7f6726562420ff0bb82',
 ];
 
 export const PRIMARY_CONTENT = {
@@ -684,6 +685,7 @@ const GAMING_CHANNEL_IDS = [
   '222ebc0427471470cc3d6bbefd3f35dc32a9f388',
   'b21b72c1fb29f6dcb866cf7d148428d885ad42ea',
   'a77d47871d1b29b7aee4d1e4a646b06253475fe3',
+  'af0f5d9e055d07c8308da7f6726562420ff0bb82',
 ];
 
 export const GAMING = {
@@ -1087,6 +1089,9 @@ const NEWS_CHANNEL_IDS = [
   '5462a0ced61fc3f86225908608872f0fda2cbc32',
   'c4b5c6d71ac9597b69c5559ca0f03691f58370a9',
   '0475ed551e9513cbf81d2bec27488b9f5ea78d9a',
+  '8954add966e59c9cba98a143a3387f788a36d7be',
+  '79162cdb9d5ae8d7502089a38bdaaf81f902bf0c',
+  'b57fb7641efdeb7af52bf96abb280d84c45587cc',
 ];
 
 export const NEWS = {
