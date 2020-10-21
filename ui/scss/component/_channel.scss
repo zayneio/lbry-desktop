@@ -302,3 +302,10 @@ $metadata-z-index: 1;
   border-radius: var(--border-radius);
   background-color: var(--color-card-background-highlighted);
 }
+
+.channel__staked-indicator {
+  margin-left: 2px;
+  margin-right: 5px;
+  padding: 0;
+  margin-bottom: -3px;
+}

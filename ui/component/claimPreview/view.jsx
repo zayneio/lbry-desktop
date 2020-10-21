@@ -246,9 +246,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         })}
       >
         {isChannel && claim ? (
-          <UriIndicator uri={uri} link>
-            <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
-          </UriIndicator>
+          <div>
+            <UriIndicator uri={uri} link>
+              <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
+            </UriIndicator>
+          </div>
         ) : (
           <>
             {showPublishLink ? null : !pending ? (

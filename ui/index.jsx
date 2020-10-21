@@ -63,7 +63,7 @@ if (process.env.SDK_API_URL) {
 
 let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
 // @if TARGET='web'
-sdkAPIHost = LBRY_WEB_API;
+sdkAPIHost = 'https://api.lbry.tv' || LBRY_WEB_API;
 // @endif
 
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
