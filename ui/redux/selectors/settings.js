@@ -1,5 +1,6 @@
 import { SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
 import { createSelector } from 'reselect';
+import homepages from 'homepages';
 
 const selectState = state => state.settings || {};
 
@@ -49,6 +50,22 @@ export const selectThemePath = createSelector(
   (theme, automaticDarkModeEnabled, isNight) => {
     const dynamicTheme = automaticDarkModeEnabled && isNight ? 'dark' : theme;
     return dynamicTheme || 'light';
+  }
+);
+
+export const selectHomepageCode = makeSelectClientSetting(SETTINGS.HOMEPAGE);
+
+export const selectHomepageData = createSelector(
+  // using homepage setting,
+  selectHomepageCode,
+  homepageCode => {
+    // homepages = { 'odysee-en': odyseeFile, ... }
+    if (!homepageCode) {
+      return homepages['odysee-fr'];
+    } else {
+      // getHomepageForUser...
+      return homepages[homepageCode];
+    }
   }
 );
 

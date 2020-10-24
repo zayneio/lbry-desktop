@@ -39,6 +39,7 @@ const defaultState = {
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
     [SETTINGS.THEME]: __('dark'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
+    [SETTINGS.HOMEPAGE]: undefined,
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,
