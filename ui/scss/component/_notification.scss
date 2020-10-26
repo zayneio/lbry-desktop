@@ -14,6 +14,9 @@
 }
 
 .notification__icon {
+  display: flex;
+  align-items: center;
+
   .icon__wrapper {
     width: 1rem;
     height: 1rem;
@@ -72,7 +75,7 @@
   color: var(--color-text);
   margin-bottom: var(--spacing-s);
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
@@ -84,7 +87,7 @@
 .notification__text {
   font-size: var(--font-body);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -143,6 +146,22 @@
   margin-top: var(--spacing-s);
 
   @media (min-width: $breakpoint-small) {
+    margin-top: 0;
+  }
+}
+
+.notification__content-thumbnail {
+  @include thumbnail;
+  position: relative;
+  margin-right: auto;
+  height: auto;
+  width: 100%;
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    height: 4rem;
+    width: calc(4rem * 16 / 9);
+    margin-left: var(--spacing-s);
     margin-top: 0;
   }
 }
