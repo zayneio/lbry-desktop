@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
 import ClaimPreview from 'component/claimPreview';
+import ChannelStakedIndicator from 'component/channelStakedIndicator';
 
 type Props = {
   isResolvingUri: boolean,
@@ -44,7 +45,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, addTooltip, children, inline, hideAnonymous = false } = this.props;
+    const { uri, link, isResolvingUri, claim, addTooltip, children, inline, hideAnonymous = false } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -57,7 +58,11 @@ class UriIndicator extends React.PureComponent<Props> {
         return null;
       }
 
-      return <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
+      return (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          Anonymous
+        </span>
+      );
     }
 
     const channelClaim = isChannelClaim ? claim : claim.signing_channel;
@@ -66,7 +71,12 @@ class UriIndicator extends React.PureComponent<Props> {
       const { name } = channelClaim;
       const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
-      const inner = <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>{name}</span>;
+      const inner = (
+        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+          {name}
+          <ChannelStakedIndicator uri={uri} />
+        </span>
+      );
 
       if (!channelLink) {
         return inner;

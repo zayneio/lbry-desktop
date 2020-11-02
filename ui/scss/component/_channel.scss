@@ -312,3 +312,9 @@ $metadata-z-index: 1;
   border-radius: var(--border-radius);
   background-color: var(--color-card-background-highlighted);
 }
+
+.channel__staked-amount {
+  display: inline-block;
+  margin-left: var(--spacing-xxs);
+  opacity: 0.8;
+}
