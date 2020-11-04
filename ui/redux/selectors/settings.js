@@ -61,13 +61,10 @@ export const selectHomepageData = createSelector(
   // using homepage setting,
   selectHomepageCode,
   homepageCode => {
-    // homepages = { 'odysee-en': odyseeFile, ... }
-    console.log('hpc', homepageCode);
-    console.log('hompages', homepages);
+    // homepages = { 'en': odyseeFile, ... }
     if (!homepageCode) {
       return homepages['en'];
     } else {
-      // getHomepageForUser...
       return homepages[homepageCode];
     }
   }

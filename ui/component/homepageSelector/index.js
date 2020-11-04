@@ -4,7 +4,6 @@ import { SETTINGS } from 'lbry-redux';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectHomepageCode } from 'redux/selectors/settings';
 
-console.log('SETTINGS', SETTINGS);
 const select = state => ({
   homepage: selectHomepageCode(state),
 });
