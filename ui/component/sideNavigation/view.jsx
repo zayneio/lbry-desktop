@@ -5,6 +5,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
+import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2 } from 'config';
 // @if TARGET='app'
@@ -260,6 +261,16 @@ function SideNavigation(props: Props) {
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
+  const unAuthNudge = (
+    <div className="navigation__auth-nudge">
+      <span>
+        Sign in to support your favorite creators. <Icon icon={ICONS.LBC} />
+      </span>
+
+      <Button button="secondary" label={__('Sign In')} />
+    </div>
+  );
+
   return (
     <div
       className={classnames('navigation__wrapper', {
@@ -321,6 +332,20 @@ function SideNavigation(props: Props) {
                 ))}
               </ul>
             )}
+
+            {!isAuthenticated &&
+              (sidebarOpen ? (
+                unAuthNudge
+              ) : (
+                <div className="navigation-links--micro">
+                  <Button
+                    label={__('Sign In')}
+                    icon={ICONS.SIGN_IN}
+                    className={classnames('navigation-link')}
+                    activeClass="navigation-link--active"
+                  />
+                </div>
+              ))}
           </div>
         </nav>
       )}
@@ -396,6 +421,7 @@ function SideNavigation(props: Props) {
                   ))}
                 </ul>
               )}
+              {!isAuthenticated && unAuthNudge}
             </div>
           </nav>
           <div

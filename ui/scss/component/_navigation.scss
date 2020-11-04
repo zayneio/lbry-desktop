@@ -236,3 +236,19 @@
     top: calc(var(--header-height) + var(--mac-titlebar-height));
   }
 }
+
+.navigation__auth-nudge {
+  @extend .card;
+  margin: var(--spacing-s);
+  padding: var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+
+  .button {
+    margin-top: var(--spacing-s);
+  }
+
+  .button__content {
+    justify-content: center;
+  }
+}
