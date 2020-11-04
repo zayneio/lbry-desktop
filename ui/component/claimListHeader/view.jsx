@@ -10,6 +10,7 @@ import { useHistory } from 'react-router';
 import { SETTINGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
+import HomepageSelector from 'component/homepageSelector';
 import { toCapitalCase } from 'util/string';
 
 type Props = {
@@ -227,7 +228,7 @@ function ClaimListHeader(props: Props) {
               ))}
           </div>
 
-          <div>
+          <div className="claim-search__top-row">
             {!hideAdvancedFilter && !SIMPLE_SITE && (
               <Button
                 button="alt"
@@ -251,6 +252,7 @@ function ClaimListHeader(props: Props) {
                 icon={ICONS.LAYOUT}
               />
             )}
+            <HomepageSelector />
           </div>
         </div>
         {expanded && !SIMPLE_SITE && (

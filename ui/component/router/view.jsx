@@ -51,12 +51,7 @@ import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import YoutubeSyncPage from 'page/youtubeSync';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
-import { SITE_TITLE, WELCOME_VERSION, DOMAIN } from 'config';
-import homepages from 'homepages';
-
-// const dynamicRoutes = Object.values(SIDEBAR_ROUTES).filter(
-//   (potentialRoute: any) => potentialRoute && potentialRoute.route
-// );
+import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -136,12 +131,6 @@ function AppRouter(props: Props) {
     (potentialRoute: any) => potentialRoute && potentialRoute.route
   );
 
-  console.log('hpd', homepages);
-  const currentUrl = new URL(window.location.href);
-  console.log('currentU', currentUrl);
-  const { hostname } = currentUrl;
-  const hostparts = hostname.split('.');
-
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
     const unlisten = history.listen((location, action) => {
@@ -199,14 +188,6 @@ function AppRouter(props: Props) {
   const decodedUrl = decodeURIComponent(pathname) + search;
   if (decodedUrl !== pathname + search) {
     return <Redirect to={decodedUrl} />;
-  }
-  if (hostname !== DOMAIN && hostparts.length >= 2) {
-    if (hostparts[0] === 'fr') {
-      console.log('french');
-      // return window.location.replace(currentUrl.protocol + '//' + DOMAIN + currentUrl.pathname);
-    }
-    window.location.href = currentUrl.protocol + '//' + DOMAIN + currentUrl.pathname;
-    return null;
   }
 
   return (

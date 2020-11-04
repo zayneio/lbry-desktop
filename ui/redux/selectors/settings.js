@@ -53,7 +53,9 @@ export const selectThemePath = createSelector(
   }
 );
 
-export const selectHomepageCode = makeSelectClientSetting(SETTINGS.HOMEPAGE);
+export const selectHomepageCode = createSelector(makeSelectClientSetting(SETTINGS.HOMEPAGE), setting => {
+  return setting || 'en';
+});
 
 export const selectHomepageData = createSelector(
   // using homepage setting,
@@ -61,7 +63,7 @@ export const selectHomepageData = createSelector(
   homepageCode => {
     // homepages = { 'odysee-en': odyseeFile, ... }
     if (!homepageCode) {
-      return homepages['odysee-fr'];
+      return homepages['en'];
     } else {
       // getHomepageForUser...
       return homepages[homepageCode];

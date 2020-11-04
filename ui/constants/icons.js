@@ -133,3 +133,4 @@ export const FIRE = 'Fire';
 export const SLIME = 'Slime';
 export const PIN = 'Pin';
 export const BEST = 'Best';
+export const CHEF = 'Chef';

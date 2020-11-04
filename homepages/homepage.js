@@ -7,14 +7,6 @@ import moment from 'moment';
 import { toCapitalCase } from 'util/string';
 import { useIsLargeScreen } from 'effects/use-screensize';
 
-export type RowDataItem = {
-  title: string,
-  link?: string,
-  help?: any,
-  options?: {},
-  icon?: string,
-};
-
 export default function GetHomePageRowData(
   authenticated: boolean,
   showPersonalizedChannels: boolean,

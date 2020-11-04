@@ -1328,7 +1328,6 @@
   "Replying as": "Replying as",
   "No uploads": "No uploads",
   "uploads": "uploads",
-  "Community": "Community",
   "Staked LBRY Credits": "Staked LBRY Credits",
   "1 comment": "1 comment",
   "%total_comments% comments": "%total_comments% comments",
@@ -1457,5 +1456,9 @@
   "Unpin": "Unpin",
   "LBRY leveled up": "LBRY leveled up",
   "This link leads to an external website.": "This link leads to an external website.",
+  "About": "About",
+  "No Content Found": "No Content Found",
+  "Publish Something": "Publish Something",
+  "Cooking": "Cooking",
   "--end--": "--end--"
 }
